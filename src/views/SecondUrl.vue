@@ -1,10 +1,7 @@
 <template>
   <div>
     <div id="thing">
-        <h3>Now I'm on the second page, nice!</h3>
-        <router-link to="/first">
-            <button>Okay take me back</button>
-        </router-link>
+        <h3>{{ newUser }}</h3>
     </div>
   </div>
 </template>
@@ -13,6 +10,11 @@
 export default {
   name: 'second',
   components: {
+  },
+  data() {
+      return {
+          newUser: this.$cookie.get('isNewUser')
+      }
   }
 }
 </script>

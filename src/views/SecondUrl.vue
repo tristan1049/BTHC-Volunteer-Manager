@@ -20,7 +20,7 @@ export default {
     const user = firebase.auth().currentUser;
     if (user) {
         // User is signed in.
-        if (this.newUser === true){
+        if (this.newUser){
             this.database_create_user(user);
         }
         this.database_get_user_data(user.uid);
@@ -42,8 +42,8 @@ export default {
   },
   methods: {
     //creates a new user in the database
-    database_create_user: function(user) {
-        firebase.database().ref('user-data/' + user.uid).set({
+    database_create_user: async function(user) {
+        await firebase.database().ref('user-data/' + user.uid).set({
             displayName: user.displayName,
             email: user.email,
             uid: user.uid,
@@ -67,8 +67,10 @@ export default {
         //     this.user_data_static = snapshot.val();
         // });
         const snapshot = await firebase.database().ref('user-data/' + user_id).once('value');
+        //const snapshot = await firebase.database().ref('test/').once('value');
         this.user_data_static = snapshot.val();
         console.log(snapshot.val());
+        console.log(user_id);
     },
     database_init_user_data_update_loop: function(user_id) {
         // sets up update loop for loading data into "user_data_dynamic"

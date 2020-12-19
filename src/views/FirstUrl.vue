@@ -17,7 +17,6 @@ import 'firebase/auth'
 import 'firebase/database'
 import * as firebaseui from 'firebaseui'
 
-
 export default {
   name: 'first',
   components: {
@@ -34,7 +33,7 @@ export default {
         setNewUser(authResult.additionalUserInfo.isNewUser);
         goToOnboarding();
         //this.$cookie.set('isNewUser', authResult.additionalUserInfo.isNewUser);
-        //   init_user(authResult.additionalUserInfo.isNewUser);
+        //init_user(authResult.additionalUserInfo.isNewUser);
         //   page_manager("div.user-profile-screen");
         //   user_view_init();
 

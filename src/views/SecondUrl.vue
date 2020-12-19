@@ -24,7 +24,7 @@ export default {
             this.database_create_user(user);
         }
         this.database_get_user_data(user.uid);
-        this.database_init_user_data_update_loop(user.uid);
+        //this.database_init_user_data_update_loop(user.uid);
         //redirect(test.html)
     }
     else {
@@ -61,12 +61,14 @@ export default {
             }
         });
     },
-    database_get_user_data: function(user_id) {
+    database_get_user_data: async function(user_id) {
         // loads user data into "user_data_static" once
-        firebase.database().ref('user-data/' + user_id).once('value').then(function(snapshot) {
-            this.user_data_static = snapshot.val();
-        });
-        this.user_data_static = 'got here';
+        // firebase.database().ref('user-data/' + user_id).once('value').then(function(snapshot) {
+        //     this.user_data_static = snapshot.val();
+        // });
+        const snapshot = await firebase.database().ref('user-data/' + user_id).once('value');
+        this.user_data_static = snapshot.val();
+        console.log(snapshot.val());
     },
     database_init_user_data_update_loop: function(user_id) {
         // sets up update loop for loading data into "user_data_dynamic"
@@ -74,6 +76,7 @@ export default {
         firebase.database().ref('user-data/' + user_id).on('value', function(snapshot) {
             this.user_data_dynamic = snapshot.val();
         });
+        //console.log(snapshot.val());
     },
     database_init_location_data_update_loop: function(user_id) {
         firebase.database().ref('location-data/').on('value', function(snapshot) {

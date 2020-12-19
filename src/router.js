@@ -22,6 +22,11 @@ export default new Router({
       path: '/second',
       name: 'secondurl',
       component: ()=>import('./views/SecondUrl.vue')
+    },
+    {
+      path: '/third',
+      name: 'thirdurl',
+      component: ()=>import('./views/ThirdUrl.vue')
     }
   ]
 })

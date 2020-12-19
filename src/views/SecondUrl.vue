@@ -2,7 +2,7 @@
   <div>
     <div id="thing">
         <h3>Is new user: {{ newUser }}</h3>
-        <h3>User data: {{ user_data_static }}</h3>
+        <h3>User data: {{ user_data }}</h3>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
             this.database_create_user(user);
         }
         this.database_get_user_data(user.uid);
-        //this.database_init_user_data_update_loop(user.uid);
+        this.database_init_user_data_update_loop(user.uid);
         //redirect(test.html)
     }
     else {
@@ -35,9 +35,8 @@ export default {
   data() {
       return {
           newUser: this.$cookie.get('isNewUser'),
-          user_data_static: null,
-          user_data_dynamic: null,
-          loc_data_dynamic: null
+          user_data: null,
+          loc_data: null
       }
   },
   methods: {
@@ -68,7 +67,7 @@ export default {
         // });
         const snapshot = await firebase.database().ref('user-data/' + user_id).once('value');
         //const snapshot = await firebase.database().ref('test/').once('value');
-        this.user_data_static = snapshot.val();
+        this.user_data = snapshot.val();
         console.log(snapshot.val());
         console.log(user_id);
     },
@@ -76,7 +75,7 @@ export default {
         // sets up update loop for loading data into "user_data_dynamic"
         // auto - updates user data every time the data change 
         firebase.database().ref('user-data/' + user_id).on('value', function(snapshot) {
-            this.user_data_dynamic = snapshot.val();
+            this.user_data = snapshot.val();
         });
         //console.log(snapshot.val());
     },

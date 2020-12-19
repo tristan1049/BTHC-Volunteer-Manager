@@ -1,6 +1,11 @@
 var user_data = [];
-var location_data = [];
 
+var user_loop_ongoing = false;
+
+/**
+ * @typeof Users
+ * 
+ */
 
 /**
  * @class Users
@@ -49,9 +54,14 @@ class Users {
         //     this.user_data_static = snapshot.val();
         // });
         const snapshot = await firebase.database().ref('user-data/' + user_id).once('value');
-        //const snapshot = await firebase.database().ref('test/').once('value');
-        console.log(user_id);
-        return snapshot.val();
+        user_data = snapshot.val();
+
+        // If user_data not being maintained, start update loop
+        if (!user_loop_ongoing) {
+            this.database_init_user_data_update_loop(user_id);
+            user_loop_ongoing = true;
+        }
+        return user_data;
     }
 
     /**
@@ -73,25 +83,6 @@ class Users {
             return false;
         }
         //console.log(snapshot.val());
-    }
-
-    /**
-     * Starts location_data variable maintenance with firebase callbacks
-     * @param {String} user_id - Id of user
-     * @return {Boolean} Boolean of whether this operation is successful
-     */
-    static async database_init_location_data_update_loop(user_id) {
-        try {
-            firebase.database().ref('location-data/').on('value', function(snapshot) {
-                location_data = snapshot.val();
-                console.log(user_id);
-            });
-            return true;
-        } catch (error) {
-            console.log("Error starting location data update loop!");
-            console.log(error);
-            return false;
-        }
     }
 }
 

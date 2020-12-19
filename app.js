@@ -8,6 +8,7 @@ require('dotenv').config(); // This allows us to use variables in .env file thro
 const isProduction = process.env.NODE_ENV === 'production'; // process.env will be used by heroku to provide configs and NODE_ENV will be set to production there.
 const history = require('connect-history-api-fallback');
 
+const usersRouter = require('./routes/user');
 
 // create our app
 const app = express();
@@ -40,6 +41,8 @@ app.use(history());
 app.use(express.static(path.join(__dirname, isProduction ? 'dist' : 'public'))); // in Heroku we want dist but for dev we want public so we don't have to rebuild everytime we change something.
 
 // connect url hierarchies to our routers
+
+app.use('/api/user', usersRouter);
 
 app.use('*', function (req, res) {
   res.redirect('/').end();

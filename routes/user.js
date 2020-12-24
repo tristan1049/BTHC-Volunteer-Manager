@@ -33,3 +33,5 @@ router.get("/:id?", async (req, res) => {
         res.status(400).json({ error: err }).end();
     }
 })
+
+module.exports = router;

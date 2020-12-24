@@ -1,3 +1,7 @@
+const firebase = require("firebase/app");
+require('firebase/auth');
+require('firebase/database');
+
 var user_data = [];
 
 var user_loop_ongoing = false;
@@ -61,7 +65,7 @@ class Users {
             this.database_init_user_data_update_loop(user_id);
             user_loop_ongoing = true;
         }
-        return user_data;
+        return {thing: 5};
     }
 
     /**
@@ -86,4 +90,4 @@ class Users {
     }
 }
 
-
+module.exports = Users;

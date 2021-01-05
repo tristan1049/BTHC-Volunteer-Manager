@@ -2,6 +2,8 @@
   "name": "bthc",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "externalsType": "import",
   "scripts": {
     "start": "node ./bin/www",
     "awesome": "nodemon ./bin/www",
@@ -10,7 +12,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "~1.4.3",
     "core-js": "^3.6.5",

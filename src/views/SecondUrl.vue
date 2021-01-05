@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import firebase from "firebase/app";
-import 'firebase/auth';
-import 'firebase/database';
+import { firebase } from "../../firebase.js";
+// import 'firebase/auth';
+// import 'firebase/database';
 import axios from "axios";
 
 export default {

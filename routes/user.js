@@ -1,8 +1,8 @@
-const express = require("express");
+import express from "express";
 
 const router = express.Router();
 
-const Users = require("../models/Users");
+import { Users } from "../models/Users";
 
 /**
  * Creates a user in the database

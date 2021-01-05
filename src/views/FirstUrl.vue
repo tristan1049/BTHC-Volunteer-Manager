@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import firebase from "firebase/app"
-import 'firebase/auth';
-import 'firebase/database';
+import { firebase } from "../../firebase.js"
+// import 'firebase/auth';
+// import 'firebase/database';
 import * as firebaseui from 'firebaseui';
 
 export default {

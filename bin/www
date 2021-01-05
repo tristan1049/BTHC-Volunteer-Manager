@@ -3,9 +3,10 @@
 /**
  * Module dependencies.
  */
-const app = require('../app');
-const debug = require('debug')('bthc-starter:server');
-const http = require('http');
+import * as app from '../app';
+import * as debug_func from 'debug';
+const debug = debug_func('bthc-starter:server');
+import * as http from 'http';
 
 /**
  * Normalize a port into a number, string, or false.

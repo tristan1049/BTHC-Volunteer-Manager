@@ -1,15 +1,14 @@
-import express from 'express';
-import path from 'path';
-import cookieParser from 'cookie-parser';
-import logger from 'morgan';
-import session from 'express-session';
-import cors from 'cors';
-import dotenvfunc from 'dotenv';
-dotenvfunc.config(); // This allows us to use variables in .env file through process.env
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session');
+const cors = require('cors');
+require('dotenv').config(); // This allows us to use variables in .env file through process.env
 const isProduction = process.env.NODE_ENV === 'production'; // process.env will be used by heroku to provide configs and NODE_ENV will be set to production there.
-import history from 'connect-history-api-fallback';
+const history = require('connect-history-api-fallback');
 
-import usersRouter from './routes/user';
+const usersRouter = require('./routes/user');;
 
 // create our app
 const app = express();

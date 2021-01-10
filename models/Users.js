@@ -1,6 +1,6 @@
-import { firebase } from '../firebase.js';
-import 'firebase/auth';
-import 'firebase/database';
+const firebase = require('firebase/app');
+require('firebase/auth');
+require('firebase/database');
 
 var user_data = [];
 

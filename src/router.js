@@ -13,13 +13,18 @@ export default new Router({
 
       path: '/',
       name: 'home',
-      component: () => import('./views/FirstUrl.vue')
+      component: () => import('./views/Onboarding-1.vue')
 
     },
     {
       path: '/first',
       name: 'firsturl',
       component: ()=>import('./views/FirstUrl.vue')
+    },
+    {
+      path: '/onb1',
+      name: 'Onboarding 1',
+      component: ()=>import('./views/Onboarding-1.vue')
     },
     {
       path: '/second',

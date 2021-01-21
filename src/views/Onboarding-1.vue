@@ -1,20 +1,33 @@
 <template>
   <div>
     <div class="main-container bg-gray-custom justify-content-center">
-      <div class="row justify-content-center form-body">
+      <div class="row justify-content-center align-items-center form-body">
         <div class="col-10">
-          <div class="card shadow-lg p-5 mt-5">
-            <h1 class="text-success display-1">New User Onboarding</h1>
+          <div class="card shadow-lg p-5">
+            <h1 class="text-success display-1">New Volunteer Onboarding</h1>
             <h3 class="text-default mt-1">
               <small class="text-muted">
                 Thank you for your interest in volunteering with the Boston Tax
                 Help Coalition! Please take a few minutes to complete the
                 volunteer registration.</small
               >
-            </h3>
+            </h3>            
             <br />
             <br />
-            <div class="row">
+            <div class="text-center">
+              <router-link to='/onb2'>
+                <button class="btn btn-primary">
+                Let's get started
+                <span class="fa fa-chevron-right ml-2"></span>
+              </button>
+              </router-link>
+            </div>
+            <div class="text-center mt-1">
+              <button class="btn btn-link text-primary">
+                Wait, I'm an admin.
+              </button>
+            </div>
+            <!-- <div class="row">
               <div class="col-md-6">
                 <base-input placeholder="name@example.com"></base-input>
               </div>
@@ -46,7 +59,7 @@
                   :valid="false"
                 ></base-input>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AppHeader from "./layout/AppHeader";
-import AppFooter from "./layout/AppFooter";
-import Components from "./views/Components.vue";
+//import AppHeader from "./layout/AppHeader";
+//import AppFooter from "./layout/AppFooter";
+//import Components from "./views/Components.vue";
 
 Vue.use(Router)
 
@@ -23,8 +23,13 @@ export default new Router({
     },
     {
       path: '/onb1',
-      name: 'Onboarding 1',
+      name: 'Onboarding-1',
       component: ()=>import('./views/Onboarding-1.vue')
+    },
+    {
+      path: '/onb2',
+      name: 'Onboarding-2',
+      component: ()=>import('./views/Onboarding-2.vue')
     },
     {
       path: '/second',

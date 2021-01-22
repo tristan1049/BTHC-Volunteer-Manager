@@ -4,14 +4,264 @@
       <div class="row justify-content-center form-body">
         <div class="col-10">
           <div class="card shadow-lg p-5 my-5">
-            <h1 class="text-success display-1">New Volunteer Onboarding</h1>
-            <h3 class="text-default mt-1">
-              <small class="text-muted">
-                Thank you for your interest in volunteering with the Boston Tax
-                Help Coalition! Please take a few minutes to complete the
-                volunteer registration.</small
-              >
+            <h3 class="h4 text-success font-weight-bold mb-">Name</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <base-input placeholder="First Name"></base-input>
+              </div>
+              <div class="col-md-6">
+                <base-input placeholder="Last Name"></base-input>
+              </div>
+            </div>
+
+            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">Email</h3>
+            <small class="text-uppercase text-bold mb-3">
+              Please be sure to use an email address that you check frequently.
+              Your tax site coordinator will be using this email as the primary
+              form of contact.</small
+            >
+            <div class="row">
+              <div class="col-md-6">
+                <base-input placeholder="name@example.com"></base-input>
+              </div>
+              <div class="col-md-6">
+                <base-input
+                  placeholder="Repeat your email."
+                  :valid="true"
+                ></base-input>
+              </div>
+            </div>
+
+            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">
+              Phone Number
             </h3>
+            <small class="text-uppercase text-bold mb-3">
+              Please include the best phone number to reach you.</small
+            >
+            <div class="row">
+              <div class="col-md-6">
+                <base-input placeholder="xxx-xxx-xxxx"></base-input>
+              </div>
+            </div>
+
+            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">
+              How did you hear about our volunteer opportunities?
+            </h3>
+            <small class="text-uppercase text-bold mb-3">
+              Please be specific.</small
+            >
+            <div class="row">
+              <div class="col-md-12 mb-1">
+                <textarea
+                  class="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                  placeholder="Example: I heard about this opportunity through my workplace at state street."
+                ></textarea>
+              </div>
+            </div>
+
+            <h3 class="h4 text-success font-weight-bold mt-5 mb-4">
+              Please select your gender and ethnicity.
+            </h3>
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <div class="dropdown mr-2">
+                  <button
+                    class="btn btn-primary dropdown-toggle"
+                    type="button"
+                    id="dropdown-gender"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Gender
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdown-gender">
+                    <a class="dropdown-item">Female</a>
+                    <a class="dropdown-item">Male</a>
+                    <a class="dropdown-item">Transgender</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item">Prefer not to say</a>
+                  </div>
+                </div>
+                <div class="dropdown">
+                  <button
+                    class="btn btn-primary dropdown-toggle"
+                    type="button"
+                    id="dropdown-ethnicity"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Ethnicity
+                  </button>
+                  <div
+                    class="dropdown-menu"
+                    aria-labelledby="dropdown-ethnicity"
+                  >
+                    <a class="dropdown-item">Black/African American</a>
+                    <a class="dropdown-item">Latino/Hispanic</a>
+                    <a class="dropdown-item">White/Caucasian</a>
+                    <a class="dropdown-item">Asian/Pacific Islander</a>
+                    <a class="dropdown-item">Native American</a>
+                    <a class="dropdown-item">Multi-racial</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item">Other</a>
+                    <a class="dropdown-item">Prefer not to say</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">
+              What languages do you speak?
+            </h3>
+            <small class="text-uppercase text-bold mb-4">
+              Please check all that apply.</small
+            >
+            <div class="row">
+              <div class="col-md-2">
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-english"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-english"
+                    >English</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-spanish"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-spanish"
+                    >Spanish</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-hatian"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-hatian"
+                    >Haitian Creole</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-vietnamese"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-vietnamese"
+                    >Vietnamese</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-portuguese"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-portuguese"
+                    >Portuguese</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-cantonese"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-cantonese"
+                    >Cantonese</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-mandarin"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-mandarin"
+                    >Mandarin</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-cape"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-cape"
+                    >Cape Verdean Creole</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-arabic"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-arabic"
+                    >Arabic</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-somali"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-somali"
+                    >Somali</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-american"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-american"
+                    >American Sign Language</label
+                  >
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    class="custom-control-input"
+                    id="checkbox-other"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label" for="checkbox-other"
+                    >Other</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <h3 class="h4 text-success font-weight-bold mt-4 mb-4">
+              Have you volunteered with any VITA program in the past, and/or are
+              you a tax professional?
+            </h3>
+            <div>
+              <div class="custom-control custom-radio mb-3">
+                <input name="select-professional" class="custom-control-input" id="select-professional-yes" type="radio"/>
+                <label class="custom-control-label" for="select-professional-yes">Yes</label>
+              </div>
+              <div class="custom-control custom-radio mb-3">
+                <input name="select-professional" class="custom-control-input" id="select-professional-no" type="radio"/>
+                <label class="custom-control-label" for="select-professional-no">No</label>
+              </div>
+            </div>
+
             <br />
             <br />
             <ul class="pagination pagination-lg justify-content-center">
@@ -34,131 +284,6 @@
                 </a>
               </li>
             </ul>
-            <br />
-            <br />
-
-            <h3 class="h4 text-success font-weight-bold mb-">Name</h3>
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="First Name"></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input placeholder="Last Name"></base-input>
-              </div>
-            </div>
-
-            <h3 class="h4 text-success font-weight-bold mt-3 mb-1">Email</h3>
-            <small class="text-uppercase text-bold mb-3">
-              Please be sure to use an email address that you check frequently.
-              Your tax site coordinator will be using this email as the primary
-              form of contact.</small
-            >
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="name@example.com"></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input
-                  placeholder="Repeat your email."
-                  :valid="true"
-                ></base-input>
-              </div>
-            </div>
-
-            <h3 class="h4 text-success font-weight-bold mt-3 mb-1">
-              Phone Number
-            </h3>
-            <small class="text-uppercase text-bold mb-3">
-              Please include the best phone number to reach you.</small
-            >
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="xxx-xxx-xxxx"></base-input>
-              </div>
-            </div>
-
-            <h3 class="h4 text-success font-weight-bold mt-3 mb-1">
-              How did you hear about our volunteer opportunities?
-            </h3>
-            <small class="text-uppercase text-bold mb-3">
-              Please be specific.</small
-            >
-            <div class="row">
-              <div class="col-md-12 mb-1">
-                <textarea
-                  class="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                  placeholder="Example: I heard about this opportunity through my workplace at state street."
-                ></textarea>
-              </div>
-            </div>
-
-            <h3 class="h4 text-success font-weight-bold mt-4 mb-2">
-              Please select your gender and ethnicity.
-            </h3>
-            
-            <div class="row">
-              <div class="col-md-6">
-                <div class="dropdown">
-                  <button
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Regular
-                  </button>
-                  <div
-                    class="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <base-input placeholder="Disabled" disabled></base-input>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="name@example.com"></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input placeholder="Disabled" disabled></base-input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <base-input
-                  placeholder="Birthday"
-                  addon-left-icon="ni ni-zoom-split-in"
-                ></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input
-                  placeholder="Birthday"
-                  addon-right-icon="ni ni-zoom-split-in"
-                ></base-input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="Success" :valid="true"></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input
-                  placeholder="Error input"
-                  :valid="false"
-                ></base-input>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -167,6 +292,8 @@
 </template>
 
 <script>
+import "bootstrap/dist/js/bootstrap.bundle";
+
 export default {
   name: "Onboarding 1",
   components: {},

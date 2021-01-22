@@ -140,7 +140,7 @@ export default {
     };
 
     const goToOnboarding = () => {
-      this.$router.push("/second");
+      this.$router.push("/onb1");
     };
   },
   data() {

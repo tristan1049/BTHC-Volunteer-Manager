@@ -4,64 +4,62 @@
       <div class="row justify-content-center form-body">
         <div class="col-10">
           <div class="card shadow-lg p-5 my-5">
-            <h3 class="h4 text-success font-weight-bold mb-">Name</h3>
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="First Name"></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input placeholder="Last Name"></base-input>
-              </div>
+            <!-- Alert for telling people how the form saves -->
+            <div class="alert alert-primary alert-with-icon mb-5">
+              <button
+                type="button"
+                aria-hidden="true"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span class="fa fa-times ml-4 text-white"></span>
+              </button>
+              <span data-notify="icon" class="tim-icons icon-trophy"></span>
+              <span>
+                <b> Heads up! - </b> This form auto-saves as you move from page.
+              </span>
             </div>
 
-            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">Email</h3>
-            <small class="text-uppercase text-bold mb-3">
-              Please be sure to use an email address that you check frequently.
-              Your tax site coordinator will be using this email as the primary
-              form of contact.</small
-            >
-            <div class="row">
+            <!-- Name Field -->
+            <h3 class="h4 text-success font-weight-bold mb-3">Name</h3>
+            <div class="row mb-5">
               <div class="col-md-6">
-                <base-input placeholder="name@example.com"></base-input>
-              </div>
-              <div class="col-md-6">
-                <base-input
-                  placeholder="Repeat your email."
-                  :valid="true"
-                ></base-input>
-              </div>
-            </div>
-
-            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">
-              Phone Number
-            </h3>
-            <small class="text-uppercase text-bold mb-3">
-              Please include the best phone number to reach you.</small
-            >
-            <div class="row">
-              <div class="col-md-6">
-                <base-input placeholder="xxx-xxx-xxxx"></base-input>
-              </div>
-            </div>
-
-            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">
-              How did you hear about our volunteer opportunities?
-            </h3>
-            <small class="text-uppercase text-bold mb-3">
-              Please be specific.</small
-            >
-            <div class="row">
-              <div class="col-md-12 mb-1">
-                <textarea
+                <input
+                  type="text"
                   class="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                  placeholder="Example: I heard about this opportunity through my workplace at state street."
-                ></textarea>
+                  id="input-first-name"
+                  placeholder="First Name"
+                />
+              </div>
+              <div class="col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="input-last-name"
+                  placeholder="Last Name"
+                />
               </div>
             </div>
 
-            <h3 class="h4 text-success font-weight-bold mt-5 mb-4">
+            <!-- Phone Number Field -->
+            <h3 class="h4 text-success font-weight-bold mb-1">Phone Number</h3>
+            <h6 class="text-bold text-muted mb-3">
+              Please include the best phone number to reach you.
+            </h6>
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="input-phone-number"
+                  placeholder="xxx-xxx-xxxx"
+                />
+              </div>
+            </div>
+
+            <!-- Gender and Ethnicity Buttons -->
+            <h3 class="h4 text-success font-weight-bold mb-4">
               Please select your gender and ethnicity.
             </h3>
             <div class="row mb-4">
@@ -114,14 +112,27 @@
               </div>
             </div>
 
-            <h3 class="h4 text-success font-weight-bold mt-4 mb-1">
+            <!-- Other Ethnicity Field -->
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="input-ethnicity-other"
+                  placeholder="Please specify other."
+                />
+              </div>
+            </div>
+
+            <!-- Language Check Boxes -->
+            <h3 class="h4 text-success font-weight-bold mb-1">
               What languages do you speak?
             </h3>
-            <small class="text-uppercase text-bold mb-4">
-              Please check all that apply.</small
-            >
-            <div class="row">
-              <div class="col-md-2">
+            <h6 class="text-bold text-muted mb-3">
+              Please check all that apply.
+            </h6>
+            <div class="row mb-3">
+              <div class="col-md-3">
                 <div class="custom-control custom-checkbox mb-3">
                   <input
                     class="custom-control-input"
@@ -247,23 +258,50 @@
               </div>
             </div>
 
-            <h3 class="h4 text-success font-weight-bold mt-4 mb-4">
-              Have you volunteered with any VITA program in the past, and/or are
-              you a tax professional?
-            </h3>
-            <div>
-              <div class="custom-control custom-radio mb-3">
-                <input name="select-professional" class="custom-control-input" id="select-professional-yes" type="radio"/>
-                <label class="custom-control-label" for="select-professional-yes">Yes</label>
-              </div>
-              <div class="custom-control custom-radio mb-3">
-                <input name="select-professional" class="custom-control-input" id="select-professional-no" type="radio"/>
-                <label class="custom-control-label" for="select-professional-no">No</label>
+            <!-- Other Language Field -->
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="input-ethnicity-other"
+                  placeholder="Please specify other."
+                />
               </div>
             </div>
 
+            <!-- Save Button -->
+            <div class="text-right">
+              <button class="btn btn-primary" data-toggle="modal" data-target="#modal-save">
+                Save my progress!
+              </button>
+            </div>
+
+            <!-- Save Confirmation Modal -->
+            <div class="modal fade" id="modal-save" tabindex="-1" role="dialog" aria-labelledby="save-modal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title  font-weight-bold text-success">Saved</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Your changes have been saved
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spacing -->
             <br />
             <br />
+
+            <!-- Page changing UI -->
             <ul class="pagination pagination-lg justify-content-center">
               <!-- <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1">
@@ -277,6 +315,7 @@
               </li>
               <li class="page-item"><a class="page-link" href="#">2</a></li>
               <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">4</a></li>
               <li class="page-item">
                 <a class="page-link" href="#">
                   <i class="fa fa-angle-right"></i>
@@ -292,10 +331,10 @@
 </template>
 
 <script>
-import "bootstrap/dist/js/bootstrap.bundle";
+//import "bootstrap/dist/js/bootstrap.bundle";
 
 export default {
-  name: "Onboarding 1",
+  name: "Onboarding-2",
   components: {},
   // mounted() {
   //   let self = this;

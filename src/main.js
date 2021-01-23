@@ -6,6 +6,8 @@ import Vue from 'vue'
 import VueCookie from 'vue-cookie'
 import App from './App.vue'
 import router from './router'
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import Argon from "./plugins/argon-kit";
 
 

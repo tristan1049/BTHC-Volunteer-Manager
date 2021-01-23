@@ -69,7 +69,7 @@
 
 <script>
 export default {
-  name: "Onboarding 1",
+  name: "Onboarding-1",
   components: {},
   // mounted() {
   //   let self = this;

@@ -302,27 +302,7 @@
             <br />
 
             <!-- Page changing UI -->
-            <ul class="pagination pagination-lg justify-content-center">
-              <!-- <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">
-                  <i class="fa fa-angle-left"></i>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li> -->
-
-              <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">4</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  <i class="fa fa-angle-right"></i>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
+            <PageChanger v-bind:page="1"/>
           </div>
         </div>
       </div>
@@ -332,10 +312,13 @@
 
 <script>
 //import "bootstrap/dist/js/bootstrap.bundle";
+import PageChanger from "../components/PageChanger";
 
 export default {
   name: "Onboarding-2",
-  components: {},
+  components: {
+    PageChanger
+  },
   // mounted() {
   //   let self = this;
   //   firebase.auth().onAuthStateChanged(function(user) {

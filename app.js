@@ -8,7 +8,7 @@ require('dotenv').config(); // This allows us to use variables in .env file thro
 const isProduction = process.env.NODE_ENV === 'production'; // process.env will be used by heroku to provide configs and NODE_ENV will be set to production there.
 const history = require('connect-history-api-fallback');
 
-const usersRouter = require('./routes/user');;
+const usersRouter = require('./routes/user');
 
 // create our app
 const app = express();

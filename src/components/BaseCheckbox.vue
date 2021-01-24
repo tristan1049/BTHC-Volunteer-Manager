@@ -56,7 +56,8 @@ export default {
     inlineClass() {
       if (this.inline) {
         return `form-check-inline`;
-      }
+      } 
+      return null;
     }
   },
   mounted() {

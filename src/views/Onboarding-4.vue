@@ -75,10 +75,10 @@
                     Role
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdown-gender">
-                    <a class="dropdown-item" data-toggle="tab" href="#terms-tax-body">Tax Preparer</a>
-                    <a class="dropdown-item" data-toggle="tab" href="#terms-financial-body">Financial Guide</a>
-                    <a class="dropdown-item" data-toggle="tab" href="#terms-bilingual-body">Bi-lingual Interpreter</a>
-                    <a class="dropdown-item" data-toggle="tab" href="#terms-community-body">Community Engagement Liaison</a>
+                    <a @click="activate(1)" class="dropdown-item" href="#terms-tax-body">Tax Preparer</a>
+                    <a @click="activate(2)" class="dropdown-item" href="#terms-financial-body">Financial Guide</a>
+                    <a @click="activate(3)" class="dropdown-item" href="#terms-bilingual-body">Bi-lingual Interpreter</a>
+                    <a @click="activate(4)" class="dropdown-item" href="#terms-community-body">Community Engagement Liaison</a>
                   </div>
                 </div>
               </div>
@@ -97,20 +97,20 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="terms-tax-body" role="tabpanel" aria-labelledby="terms-tax-body">
+                        <div class="tab-pane fade" v-bind:class="{ show: active_el === 1, active: active_el === 1}" id="terms-tax-body" role="tabpanel" aria-labelledby="terms-tax-body">
                             <p class="description">Prior tax experience is not necessary. We will train! Tax Preparer volunteers prepare and file taxes face-to-face with eligible taxpayers using IRS TaxWise software. Volunteers are encouraged to serve at any site (or combination of sites) as they wish.</p>
                             <p class="description">Commitment: Volunteers are respectfully requested to volunteer at their selected tax site at least 4 hours per week, or for a total of 30 hours of service throughout the tax season.</p>
                         </div>
-                        <div class="tab-pane fade" id="terms-financial-body" role="tabpanel" aria-labelledby="terms-financial-body">
+                        <div class="tab-pane fade" v-bind:class="{ show: active_el === 2, active: active_el === 2}" id="terms-financial-body" role="tabpanel" aria-labelledby="terms-financial-body">
                             <p class="description">Financial Guide volunteers provide a comprehensive tax site intake experience for taxpayers. This includes screening for tax preparation readiness and eligibility, interpreting and advising client’s credit report, referring services, and encouraging clients to opt-in to tax-time savings options. Financial Guides are placed at a tax site at the discretion of the Coalition Asset Building Program Coordinator.</p>
                             <p class="description">Commitment: Volunteers are respectfully requested to volunteer at their selected tax site at least 4 hours per week, or for a total of 30 hours of service throughout the tax season.</p>
                         </div>
-                        <div class="tab-pane fade" id="terms-bilingual-body" role="tabpanel" aria-labelledby="terms-bilingual-body">
+                        <div class="tab-pane fade" v-bind:class="{ show: active_el === 3, active: active_el === 3}" id="terms-bilingual-body" role="tabpanel" aria-labelledby="terms-bilingual-body">
                             <p class="description">Bi-lingual Interpreter volunteers will provide interpretation and translation services to Limited English Proficiency taxpayers at one of, or a combination of, tax sites. Languages needed are: Spanish, Portuguese, Cantonese, Mandarin, Haitian Creole, Vietnamese, Arabic, and Cape Verdean.</p>
                             <p class="description">Commitment: Volunteers are respectfully requested to volunteer at their selected tax site at least 4 hours per week, or for a total of 30 hours of service throughout the tax season.</p>
                             <strong>You MUST be able to speak English and another language fluently.</strong>
                         </div>
-                        <div class="tab-pane fade" id="terms-community-body" role="tabpanel" aria-labelledby="terms-community-body">
+                        <div class="tab-pane fade" v-bind:class="{ show: active_el === 4, active: active_el === 4}" id="terms-community-body" role="tabpanel" aria-labelledby="terms-community-body">
                             <p class="description">Community Engagement Liaison volunteers are responsible for greeting all incoming taxpayers, answering basic tax FAQs, providing taxpayers with the necessary paperwork, screening taxpayers for eligibility, and assuring a smooth flow of taxpayers from initial sign-up to the financial check-up process and/or tax preparation stage. Volunteers are encouraged to serve at any site (or combination of sites) they wish.</p>
                             <p class="description">Commitment: Volunteers are respectfully requested to volunteer at their selected tax site at least 4 hours per week, or for a total of 30 hours of service throughout the tax season.</p> 
                         </div>
@@ -186,6 +186,16 @@ export default {
   components: {
     PageChanger
   },
+  data() {
+    return {
+      active_el: 1
+    }
+  },
+  methods: {
+    activate: async function(tab) {
+      this.active_el = tab;
+    }
+  }
   // mounted() {
   //   let self = this;
   //   firebase.auth().onAuthStateChanged(function(user) {

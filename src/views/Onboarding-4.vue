@@ -97,6 +97,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <div class="tab-content" id="myTabContent">
+<<<<<<< HEAD
                         <div class="tab-pane fade" v-bind:class="{ show: active_el === 1, active: active_el === 1}" id="terms-tax-body" role="tabpanel" aria-labelledby="terms-tax-body">
                             <p class="description">Prior tax experience is not necessary. We will train! Tax Preparer volunteers prepare and file taxes face-to-face with eligible taxpayers using IRS TaxWise software. Volunteers are encouraged to serve at any site (or combination of sites) as they wish.</p>
                             <p class="description">Commitment: Volunteers are respectfully requested to volunteer at their selected tax site at least 4 hours per week, or for a total of 30 hours of service throughout the tax season.</p>
@@ -113,6 +114,41 @@
                         <div class="tab-pane fade" v-bind:class="{ show: active_el === 4, active: active_el === 4}" id="terms-community-body" role="tabpanel" aria-labelledby="terms-community-body">
                             <p class="description">Community Engagement Liaison volunteers are responsible for greeting all incoming taxpayers, answering basic tax FAQs, providing taxpayers with the necessary paperwork, screening taxpayers for eligibility, and assuring a smooth flow of taxpayers from initial sign-up to the financial check-up process and/or tax preparation stage. Volunteers are encouraged to serve at any site (or combination of sites) they wish.</p>
                             <p class="description">Commitment: Volunteers are respectfully requested to volunteer at their selected tax site at least 4 hours per week, or for a total of 30 hours of service throughout the tax season.</p> 
+=======
+                        <div class="tab-pane fade show active" id="terms-tax-body" role="tabpanel" aria-labelledby="terms-tax-body">
+                          <ul>
+                            <li>I understand that as a NEW Tax Preparer Volunteer, I must take ALL the required training components a 2-day classroom training</li>
+                            <li>I understand that when I sign-up for my classroom training, I MUST create (or log back into) a SignUp Genius volunteer account. (You will receive the link to Sign-Up Genius upon completing this form)</li>
+                            <li>I understand that I MUST become IRS basic certified (or re-certified) as a Tax Preparer BEFORE I am able to volunteer at my confirmed tax site.</li>
+                            <li>I understand that I am respectfully requested to volunteer at least 4 hours a week, or a total of 30 hours throughout the 2020 tax season.</li>
+                            <li>I understand that I must pass a background check and/or other paperwork IF I select any ABCD OR STREETCRED tax site location BEFORE I am able volunteer at one of these locations. </li>
+                          </ul>
+                        </div>
+                        <div class="tab-pane fade" id="terms-financial-body" role="tabpanel" aria-labelledby="terms-financial-body">
+                          <ul>
+                            <li>I understand that as a NEW Financial Guide Volunteer, I must take ALL the required training components (Part ONE: Online training and Part TWO: Classroom training)</li>
+                            <li>I understand that when I sign-up for my Part Two classroom training, I MUST create (or log back into) a SignUp Genius volunteer account. (You will receive the link to SignUp Genius after completing this form)</li>
+                            <li>I understand that I MUST complete and successful pass the IRS Volunteer Standards of Conduct and Intake/Interview exams BEFORE I am able to volunteer at my confirmed tax site.</li>
+                            <li>I understand that I am respectfully requested to volunteer at least 4 hours a week, or a total of 30 hours throughout the 2018 tax season.</li>
+                            <li>I understand that I must pass a background check and/or other paperwork IF I select any ABCD tax site location BEFORE I am able volunteer at one of these locations. </li>
+                          </ul>
+                        </div>
+                        <div class="tab-pane fade" id="terms-bilingual-body" role="tabpanel" aria-labelledby="terms-bilingual-body">
+                          <ul>
+                            <li>I understand that as a Bi-Lingual Interpreter Volunteer, I must attend the tax site orientation.</li>
+                            <li>I understand that I MUST complete and successful pass the IRS Volunteer Standards of Conduct and Intake/Interview exams BEFORE I am able to volunteer at my confirmed tax site.</li>
+                            <li>I understand that I am respectfully requested to volunteer at least 4 hours a week, or a total of 30 hours throughout the 2020 tax season.</li>
+                            <li>I understand that I must pass a background check and/or other paperwork IF I select any STREETCRED tax site location BEFORE I am able volunteer at one of these locations. </li>
+                          </ul>
+                        </div>
+                        <div class="tab-pane fade" id="terms-community-body" role="tabpanel" aria-labelledby="terms-community-body">
+                          <ul>
+                            <li>I understand that as a Community Engagement Liaison Volunteer, I must take the required classroom training and attend my tax site site orientation.</li>
+                            <li>I understand that I MUST complete and successful pass the IRS Volunteer Standards of Conduct and Intake/Interview exams BEFORE I am able to volunteer at my confirmed tax site.</li>
+                            <li>I understand that I am respectfully requested to volunteer at least 4 hours a week, or a total of 30 hours throughout the 2018 tax season.</li>
+                            <li>I understand that I must pass a background check and/or other paperwork IF I select any STREETCRED tax site location BEFORE I am able volunteer at one of these locations.</li>
+                          </ul>
+>>>>>>> e42848129ffd4b47556c17618d14bf421db96053
                         </div>
                     </div>
                 </div>

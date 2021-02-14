@@ -23,12 +23,19 @@
 
             <!-- Name Field -->
             <h3 class="h4 text-success font-weight-bold mb-3">Name</h3>
+            <h6 style="color: red; font-size: 85%;" v-if="first_name_empty">
+              'First Name' is a required field.
+            </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="last_name_empty">
+              'Last Name' is a required field.
+            </h6>
             <div class="row mb-5">
               <div class="col-md-6">
                 <input
                   type="text"
                   class="form-control"
                   id="input-first-name"
+                  v-model="first_name"
                   placeholder="First Name"
                 />
               </div>
@@ -37,6 +44,7 @@
                   type="text"
                   class="form-control"
                   id="input-last-name"
+                  v-model="last_name"
                   placeholder="Last Name"
                 />
               </div>
@@ -47,81 +55,256 @@
             <h6 class="text-bold text-muted mb-3">
               Please include the best phone number to reach you.
             </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="phone_number_empty">
+              'Phone Number' is a required field.
+            </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="phone_number_bad">
+              'Phone Number' contains unallowed characters. Please only include numbers, dashes -, brackets (), and spaces.
+            </h6>
             <div class="row mb-5">
               <div class="col-md-6">
                 <input
                   type="text"
                   class="form-control"
                   id="input-phone-number"
+                  v-model="phone_number"
                   placeholder="xxx-xxx-xxxx"
                 />
               </div>
             </div>
 
-            <!-- Gender and Ethnicity Buttons -->
+            <!-- Gender Buttons -->
             <h3 class="h4 text-success font-weight-bold mb-4">
-              Please select your gender and ethnicity.
+              Please select your gender.
             </h3>
+            <h6 style="color: red; font-size: 85%;" v-if="gender_empty">
+              'Gender' is a required field.
+            </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="gender_input_empty">
+              You selected 'Other' gender. Please specify in the text box.
+            </h6>
             <div class="row mb-4">
               <div class="col-md-12">
-                <div class="dropdown mr-2">
-                  <button
-                    class="btn btn-primary dropdown-toggle"
-                    type="button"
-                    id="dropdown-gender"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Gender
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdown-gender">
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-gender', 'Female')">Female</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-gender', 'Male')">Male</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-gender', 'Transgender')">Transgender</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-gender', 'Prefer not to say')">Prefer not to say</a>
+                <div class="mb-5">
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-gender"
+                      class="custom-control-input"
+                      id="select-gender-male"
+                      type="radio"
+                      value="Male"
+                      v-model="gender"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-gender-male"
+                      >Male</label
+                    >
                   </div>
-                </div>
-                <div class="dropdown">
-                  <button
-                    class="btn btn-primary dropdown-toggle"
-                    type="button"
-                    id="dropdown-ethnicity"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Ethnicity
-                  </button>
-                  <div
-                    class="dropdown-menu"
-                    aria-labelledby="dropdown-ethnicity"
-                  >
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Black/African American')">Black/African American</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Latino/Hispanic')">Latino/Hispanic</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'White/Caucasian')">White/Caucasian</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Asian/Pacific Islander')">Asian/Pacific Islander</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Native American')">Native American</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Multi-racial')">Multi-racial</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Other')">Other</a>
-                    <a class="dropdown-item" @click="set_dropdown_text('dropdown-ethnicity', 'Prefer not to say')">Prefer not to say</a>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-gender"
+                      class="custom-control-input"
+                      id="select-gender-female"
+                      type="radio"
+                      value="Female"
+                      v-model="gender"
+                    />
+                    <label class="custom-control-label" for="select-gender-female"
+                      >Female</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-gender"
+                      class="custom-control-input"
+                      id="select-gender-transgender"
+                      type="radio"
+                      value="Transgender"
+                      v-model="gender"
+                    />
+                    <label class="custom-control-label" for="select-gender-transgender"
+                      >Transgender</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-gender"
+                      class="custom-control-input"
+                      id="select-gender-no"
+                      type="radio"
+                      value="No"
+                      v-model="gender"
+                    />
+                    <label class="custom-control-label" for="select-gender-no"
+                      >Prefer not to say</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-gender"
+                      class="custom-control-input"
+                      id="select-gender-other"
+                      type="radio"
+                      value="Other"
+                      v-model="gender"
+                    />
+                    <label class="custom-control-label" for="select-gender-other"
+                      >Other</label
+                    >
+                  </div>
+                  <div class="col-md-6" v-if="gender === 'Other'">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input-gender-other"
+                      placeholder="Please specify gender"
+                      v-model="gender_other"
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Other Ethnicity Field -->
-            <div class="row mb-5">
-              <div class="col-md-6" >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="input-ethnicity-other"
-                  placeholder="Please specify other."
-                  style = "display: none"
-                />
+            <!-- Ethnicity Buttons -->
+            <h3 class="h4 text-success font-weight-bold mb-4">
+              Please select your ethnicity.
+            </h3>
+            <h6 style="color: red; font-size: 85%;" v-if="ethnicity_empty">
+              'Ethnicity' is a required field.
+            </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="ethnicity_input_empty">
+              You selected 'Other' ethnicity. Please specify in the text box.
+            </h6>
+            <div class="row mb-4">
+              <div class="col-md-12">
+                <div class="mb-5">
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-black"
+                      type="radio"
+                      value="Black/African American"
+                      v-model="ethnicity"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-ethnicity-black"
+                      >Black/African American</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-latino"
+                      type="radio"
+                      value="Latino/Hispanic"
+                      v-model="ethnicity"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-ethnicity-latino"
+                      >Latino/Hispanic</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-white"
+                      type="radio"
+                      value="White/Caucasian"
+                      v-model="ethnicity"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-ethnicity-white"
+                      >White/Caucasian</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-asian"
+                      type="radio"
+                      value="Asian/Pacific Islander"
+                      v-model="ethnicity"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-ethnicity-asian"
+                      >Asian/Pacific Islander</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-native"
+                      type="radio"
+                      value="Native American"
+                      v-model="ethnicity"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-ethnicity-native"
+                      >Native American</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-multi"
+                      type="radio"
+                      value="Multi-Racial"
+                      v-model="ethnicity"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-ethnicity-multi"
+                      >Multi-Racial</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-no"
+                      type="radio"
+                      value="No"
+                      v-model="ethnicity"
+                    />
+                    <label class="custom-control-label" for="select-ethnicity-no"
+                      >Prefer not to say</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-ethnicity"
+                      class="custom-control-input"
+                      id="select-ethnicity-other"
+                      type="radio"
+                      value="Other"
+                      v-model="ethnicity"
+                    />
+                    <label class="custom-control-label" for="select-ethnicity-other"
+                      >Other</label
+                    >
+                  </div>
+                  <div class="col-md-6" v-if="ethnicity === 'Other'">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input-gender-other"
+                      placeholder="Please specify gender"
+                      v-model="ethnicity_other"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -132,6 +315,12 @@
             <h6 class="text-bold text-muted mb-3">
               Please check all that apply.
             </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="language_empty">
+              'Language' is a required field.
+            </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="language_input_empty">
+              You selected 'Other' language. Please specify in the text box.
+            </h6>
             <div class="row mb-3">
               <div class="col-md-3">
                 <div class="custom-control custom-checkbox mb-3">
@@ -139,6 +328,8 @@
                     class="custom-control-input"
                     id="checkbox-english"
                     type="checkbox"
+                    value="English"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-english"
                     >English</label
@@ -149,6 +340,8 @@
                     class="custom-control-input"
                     id="checkbox-spanish"
                     type="checkbox"
+                    value="Spanish"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-spanish"
                     >Spanish</label
@@ -159,6 +352,8 @@
                     class="custom-control-input"
                     id="checkbox-hatiancreole"
                     type="checkbox"
+                    value="Haitian Creole"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-hatiancreole"
                     >Haitian Creole</label
@@ -169,6 +364,8 @@
                     class="custom-control-input"
                     id="checkbox-vietnamese"
                     type="checkbox"
+                    value="Vietnamese"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-vietnamese"
                     >Vietnamese</label
@@ -179,6 +376,8 @@
                     class="custom-control-input"
                     id="checkbox-portuguese"
                     type="checkbox"
+                    value="Portuguese"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-portuguese"
                     >Portuguese</label
@@ -189,6 +388,8 @@
                     class="custom-control-input"
                     id="checkbox-cantonese"
                     type="checkbox"
+                    value="Cantonese"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-cantonese"
                     >Cantonese</label
@@ -201,6 +402,8 @@
                     class="custom-control-input"
                     id="checkbox-mandarin"
                     type="checkbox"
+                    value="Mandarin"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-mandarin"
                     >Mandarin</label
@@ -211,6 +414,8 @@
                     class="custom-control-input"
                     id="checkbox-capeverdeancreole"
                     type="checkbox"
+                    value="Cape Verdean Creole"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-capeverdeancreole"
                     >Cape Verdean Creole</label
@@ -221,6 +426,8 @@
                     class="custom-control-input"
                     id="checkbox-arabic"
                     type="checkbox"
+                    value="Arabic"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-arabic"
                     >Arabic</label
@@ -231,6 +438,8 @@
                     class="custom-control-input"
                     id="checkbox-somali"
                     type="checkbox"
+                    value="Somali"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-somali"
                     >Somali</label
@@ -241,6 +450,8 @@
                     class="custom-control-input"
                     id="checkbox-americansignlanguage"
                     type="checkbox"
+                    value="American Sign Language"
+                    v-model="languages"
                   />
                   <label class="custom-control-label" for="checkbox-americansignlanguage"
                     >American Sign Language</label
@@ -251,53 +462,36 @@
                     class="custom-control-input"
                     id="checkbox-other"
                     type="checkbox"
-                    @click="toggle_language_other()"
+                    v-model="language_checkbox_other"
                   />
                   <label class="custom-control-label" for="checkbox-other"
                     >Other</label
                   >
                 </div>
               </div>
-            </div>
-
-            <!-- Other Language Field -->
-            <div class="row mb-5">
-              <div class="col-md-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="input-language-other"
-                  placeholder="Please specify other."
-                  style="display: none"
-                />
+              <div class="col-md-6" v-if="language_checkbox_other">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="input-language-other"
+                    placeholder="Please specify languages"
+                    v-model="language_other"
+                  />
               </div>
             </div>
 
+            <h5 style="color: red;" v-if="errors">
+              Correct errors before data can be saved.
+            </h5>
+            <h5 v-if="saved" class="text-success">
+              Your changes have been saved!
+            </h5>
             <!-- Save Button -->
             <div class="text-right">
               <button class="btn btn-primary" @click="save_data()">
                 Save my progress!
               </button>
-            </div>
-
-            <!-- Save Confirmation Modal -->
-            <div class="modal fade" id="modal-save" tabindex="-1" role="dialog" aria-labelledby="save-modal" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title  font-weight-bold" id = "save-title-message">Saved</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body" id = "save-message">
-                    Your changes have been saved
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok!</button>
-                  </div>
-                </div>
-              </div>
+              <div>{{ gender }}</div>
             </div>
 
             <!-- Spacing -->
@@ -320,7 +514,6 @@ import 'firebase/auth';
 import 'firebase/database';
 
 import PageChanger from "../components/PageChanger";
-import $ from 'jquery'
 //import { Router } from 'express';
 //import 'bootstrap-select'
 
@@ -331,83 +524,119 @@ export default {
   },
   data() {
       return {
-          user_data: null
+          newUser: this.$cookie.get("isNewUser"),
+          user_data: null,
+          first_name: "",
+          last_name: "",
+          phone_number: "",
+          gender: "",
+          gender_other: "",
+          ethnicity: "",
+          ethnicity_other: "",
+          languages: [],
+          language_other: "",
+          language_checkbox_other: "",
+          checkbox_other: "",
+
+          errors: false,
+          saved: false,
+          first_name_empty: false,
+          last_name_empty: false,
+          phone_number_empty: false,
+          phone_number_bad: false,
+          gender_empty: false,
+          gender_input_empty: false,
+          ethnicity_empty: false, 
+          ethnicity_input_empty: false,
+          language_empty: false,
+          language_input_empty: false,
+
+          stuff: ""
       }
   },
-  mounted() {
-
-    var user = firebase.auth().currentUser;
-    
-    if (user === null)
-      console.log(user);
-
-    // if (user === null)
-    //   Router.push({ path: 'FirstUrl' })
-    
-    this.getUserData(user.uid);
-
-  },
-  methods: {
-    toggle_language_other: async function(){
-      console.log("hello");
-      if ($('#checkbox-other').is(':checked'))
-        document.getElementById("input-language-other").style.display = "block";
-      else
-        document.getElementById("input-language-other").style.display = "none";
-      document.getElementById("input-language-other").value = ""
-    },
-    set_dropdown_text: async function(dropdown_id, text){
-      document.getElementById(dropdown_id).innerText = text;
-
-      if(dropdown_id === "dropdown-ethnicity"){
-        if (text === "Other")
-          document.getElementById("input-ethnicity-other").style.display = "block";
-        else
-          document.getElementById("input-ethnicity-other").style.display = "none";
-        document.getElementById("input-ethnicity-other").value = "";
-      }
-    },
-    read_data: function(){
-
-      var languages = ['english', 'spanish', 'hatiancreole', 'vietnamese', 'portuguese', 'cantonese', 'mandarin', 'capeverdeancreole', 'arabic', 'somali', 'americansignlanguage'];
-      var checked_languages = [];
-      for (var i = 0; i < languages.length; i++){
-        if ($('#checkbox-' + languages[i]).is(':checked'))
-          checked_languages.push(languages[i]);
-      }
-
-      //console.log($('#dropdown-ethnicity').text());
-      var out_data = {
-        first_name : $('#input-first-name').val(),
-        last_name : $('#input-last-name').val(),
-        phone_number : $('#input-phone-number').val(),
-        gender : $('#dropdown-gender').text(),
-        ethnicity : $('#dropdown-ethnicity').text(),
-        ethnicity_other : $('#input-ethnicity-other').val(),
-        language_other : $('#input-language-other').val(),
-        languages : checked_languages,
+  async created() {
+    // Check if firebase is initialized, and if not, initialize it
+    if (firebase.apps.length === 0) {
+      const firebaseConfig = {
+        apiKey: "AIzaSyDlpces85D7-q4YXqQvk6Sd7K4ns_hxzIc",
+        authDomain: "bthc-volunteer-manager.firebaseapp.com",
+        databaseURL: "https://bthc-volunteer-manager-default-rtdb.firebaseio.com",
+        projectId: "bthc-volunteer-manager",
+        storageBucket: "bthc-volunteer-manager.appspot.com",
+        messagingSenderId: "460312984962",
+        appId: "1:460312984962:web:929cdb4bca23cea6dd239b",
+        measurementId: "G-YKPGZTFHW2",
       };
 
-      return out_data
+      await firebase.default.initializeApp(firebaseConfig);
+    }
+  },
+  mounted() {
+    let self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // User is signed in, create user if new
+            if (self.newUser){
+                self.createUser(user);
+                self.$cookie.set('isNewUser', false);
+            }
+            self.stuff = user;
+            // Set user_data and check for updates to it
+            self.getUserData(user.uid);
+            //self.initLoop()
+        }
+        else {
+            // No user is signed in.
+            console.log("Error: No user is signed in!");
+        }
+    });
+  },
+  methods: {
+    createUser: async function(user) {
+      await firebase.database().ref('user-data/' + user.uid).set({
+          displayName: user.displayName,
+          email: user.email,
+          uid: user.uid,
+          role: "volunteer",
+          site: null,
+          skills: null
+      }, function(error) {
+          if (error) {
+              // The write failed...
+              console.log("Error: Could not add user to database!");
+              console.log(error);
+              return false;
+          }
+          else {
+              // Data saved successfully!
+              return true;
+          }
+      });
     },
     set_data: function(){
-
-      console.log(this.user_data);
       if (this.user_data === null)
         return;
       if (this.user_data.first_name != null)
-        document.getElementById("input-first-name").value = this.user_data.first_name;
+        this.first_name = this.user_data.first_name;
       if (this.user_data.last_name != null)
-        document.getElementById("input-last-name").value = this.user_data.last_name;
+        this.last_name = this.user_data.last_name;
       if (this.user_data.phone_number != null)
-        document.getElementById("input-phone-number").value = this.user_data.phone_number;
-      if (this.user_data.gender != null)
-        this.set_dropdown_text('dropdown-gender', this.user_data.gender)
-      if (this.user_data.ethnicity != null)
-        this.set_dropdown_text('dropdown-ethnicity', this.user_data.ethnicity)
-      if (this.user_data.ethnicity_other != null && this.user_data.ethnicity_other.length != 0)
+        this.phone_number = this.user_data.phone_number;
+      if (this.user_data.gender != null) {
+        this.gender = this.user_data.gender;
+      }
+      if (this.user_data.ethnicity != null) {
+        this.ethnicity = this.user_data.ethnicity;
+      }
+      if (this.user_data.ethnicity_other != null && this.user_data.ethnicity_other.length != 0){
+        this.ethnicity_other = this.user_data.ethnicity_other;
+
         document.getElementById("input-ethnicity-other").value = this.user_data.ethnicity_other;
+      }
       if (this.user_data.language_other != null && this.user_data.language_other.length != 0){
+        this.language_other = this.user_data.language_other;
+        this.checkbox_other = true;
+
         document.getElementById("input-language-other").style.display = "block";
         document.getElementById("input-language-other").value = this.user_data.language_other;
         document.getElementById('checkbox-other').checked = true;
@@ -422,66 +651,75 @@ export default {
 
 
     },
-    detect_errors: function(data){
-      var errors = [];
+    detect_errors: function(){
+      this.errors = false;
+      this.saved = false
+      this.first_name_empty = false;
+      this.last_name_empty = false;
+      this.phone_number_empty = false;
+      this.phone_number_bad = false;
+      this.gender_empty = false;
+      this.gender_input_empty = false;
+      this.ethnicity_empty = false;
+      this.ethnicity_input_empty = false;
+      this.language_empty = false;
+      this.language_input_empty = false;
 
-      var is_phone_number_bad = false;
       var allowed_chars = "0123456789-() "
-      for (var i = 0; i < data.phone_number.length; i++){
-        if (!allowed_chars.includes(data.phone_number[i]))
-          is_phone_number_bad = true;
+      for (var i = 0; i < this.phone_number.length; i++){
+        if (!allowed_chars.includes(this.phone_number[i])) {
+          this.phone_number_bad = true;
+          this.errors = true;
+        }
       }
 
-      if(data.first_name.length === 0)
-        errors.push("'First Name' is a required field");
-      if(data.last_name.length === 0)
-        errors.push("'Last Name' is a required field");
-      if(data.phone_number.length === 0)
-        errors.push("'Phone Number' is a required field");
-      if(is_phone_number_bad)
-        errors.push("'Phone Number' contains unallowed characters. Please only include numbers, dashes -, brackets (), and spaces");
-      if(data.gender === " Gender ")
-        errors.push("'Gender' is a required field");
-      if(data.ethnicity === " Ethnicity ")
-        errors.push("'Ethnicity' is a required field");
-      if(data.ethnicity === "Other" && data.ethnicity_other.length == 0)
-        errors.push("You selected 'other' ethnicity. Please specify in the box below the dropdown");
-      if($('#checkbox-other').is(':checked') && data.language_other.length == 0)
-        errors.push("You selected 'other' language. Please specify in the box below the checkbox");
-      else if(data.languages.length == 0 && data.language_other.length == 0 && !$('#checkbox-other').is(':checked'))
-        errors.push("'Languages' is a required field");
+      if(this.first_name.length === 0) {
+        this.first_name_empty = true;
+        this.errors = true;
+      }
+      if(this.last_name.length === 0) {
+        this.last_name_empty = true;
+        this.errors = true;
+      }
+      if(this.phone_number.length === 0) {
+        this.phone_number_empty = true;
+        this.errors = true;
+      }
+      if(this.gender === "") {
+        this.gender_empty = true;
+        this.errors = true;
+      }
+      if(this.ethnicity == "") {
+        this.ethnicity_empty = true;
+        this.errors = true;
+      }
+      if(this.gender === "Other" && this.gender_other.length === 0) {
+        this.gender_input_empty = true;
+        this.errors = true;
+      }
+      if(this.ethnicity === "Other" && this.ethnicity_other.length === 0) {
+        this.ethnicity_input_empty = true;
+        this.errors = true;
+      }
+      if(this.language_checkbox_other && this.language_other.length === 0) {
+        this.language_input_empty = true;
+        this.errors = true;
+      }
+      else if(this.languages.length === 0 && !this.language_checkbox_other) {
+        this.language_empty = true;
+        this.errors = true;
+      }
 
-      return errors;
+      if (!this.errors) {
+        this.saved = true;
+      }
     },
     save_data: async function(){
-      
-      var data = this.read_data();
-      var errors = this.detect_errors(data);
+      this.detect_errors();
 
-      //console.log(data);
-      //console.log(this.user_data);
-
-      if(errors.length == 0){
-        document.getElementById("save-title-message").innerHTML = 'Saved';
-        document.getElementById("save-title-message").classList.add("text-success");
-        document.getElementById("save-title-message").classList.remove("text-danger");
-        document.getElementById("save-message").innerHTML = 'Your changes have been saved!';
-
-        await this.writeUserData(data);
-      }
-      else{
-        document.getElementById("save-title-message").innerHTML = 'Your changes could not be saved';
-        document.getElementById("save-title-message").classList.add("text-danger");
-        document.getElementById("save-title-message").classList.remove("text-success");
-        var error_message = ""
-        for(var i = 0; i < errors.length; i++){
-          error_message += errors[i] + "<br> <br>";
-        }
-        document.getElementById("save-message").innerHTML = error_message;
-      }
-      
-      $('#modal-save').modal('show');
-        
+      //if (!this.errors) {
+        //await this.writeUserData(data);
+      //}
     },
     getUserData: async function(user_uid) {
       var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {

@@ -491,7 +491,7 @@
               <button class="btn btn-primary" @click="save_data()">
                 Save my progress!
               </button>
-              <div>{{ gender }}</div>
+              <div>{{ user_data }}</div>
             </div>
 
             <!-- Spacing -->
@@ -536,7 +536,6 @@ export default {
           languages: [],
           language_other: "",
           language_checkbox_other: "",
-          checkbox_other: "",
 
           errors: false,
           saved: false,
@@ -580,7 +579,6 @@ export default {
                 self.createUser(user);
                 self.$cookie.set('isNewUser', false);
             }
-            self.stuff = user;
             // Set user_data and check for updates to it
             self.getUserData(user.uid);
             //self.initLoop()
@@ -616,42 +614,28 @@ export default {
     set_data: function(){
       if (this.user_data === null)
         return;
-      if (this.user_data.first_name != null)
+      if (this.first_name)
         this.first_name = this.user_data.first_name;
-      if (this.user_data.last_name != null)
+      if (this.last_name)
         this.last_name = this.user_data.last_name;
-      if (this.user_data.phone_number != null)
+      if (this.phone_number)
         this.phone_number = this.user_data.phone_number;
-      if (this.user_data.gender != null) {
+      if (this.gender)
         this.gender = this.user_data.gender;
-      }
-      if (this.user_data.ethnicity != null) {
+      if (this.ethnicity)
         this.ethnicity = this.user_data.ethnicity;
-      }
-      if (this.user_data.ethnicity_other != null && this.user_data.ethnicity_other.length != 0){
+      if (this.user_data.gender_other) 
+        this.gender_other = this.user_data.gender_other;
+      if (this.user_data.ethnicity_other) 
         this.ethnicity_other = this.user_data.ethnicity_other;
-
-        document.getElementById("input-ethnicity-other").value = this.user_data.ethnicity_other;
-      }
-      if (this.user_data.language_other != null && this.user_data.language_other.length != 0){
+      if (this.user_data.languages) 
+        this.languages = this.user_data.languages;
+      if (this.user_data.language_other) {
+        this.language_checkbox_other = true;
         this.language_other = this.user_data.language_other;
-        this.checkbox_other = true;
-
-        document.getElementById("input-language-other").style.display = "block";
-        document.getElementById("input-language-other").value = this.user_data.language_other;
-        document.getElementById('checkbox-other').checked = true;
       }
-
-      
-      if (this.user_data.languages != null){
-        for(var i = 0; i < this.user_data.languages.length; i++){
-          document.getElementById('checkbox-' + this.user_data.languages[i]).checked = true;
-        }
-      }
-
-
     },
-    detect_errors: function(){
+    detect_errors: function() {
       this.errors = false;
       this.saved = false
       this.first_name_empty = false;
@@ -666,46 +650,46 @@ export default {
       this.language_input_empty = false;
 
       var allowed_chars = "0123456789-() "
-      for (var i = 0; i < this.phone_number.length; i++){
+      for (var i = 0; i < this.phone_number.length; i++) {
         if (!allowed_chars.includes(this.phone_number[i])) {
           this.phone_number_bad = true;
           this.errors = true;
         }
       }
 
-      if(this.first_name.length === 0) {
+      if (this.first_name.length === 0) {
         this.first_name_empty = true;
         this.errors = true;
-      }
-      if(this.last_name.length === 0) {
+      } 
+      if (this.last_name.length === 0) {
         this.last_name_empty = true;
         this.errors = true;
       }
-      if(this.phone_number.length === 0) {
+      if (this.phone_number.length === 0) {
         this.phone_number_empty = true;
         this.errors = true;
       }
-      if(this.gender === "") {
+      if (this.gender === "") {
         this.gender_empty = true;
         this.errors = true;
       }
-      if(this.ethnicity == "") {
+      if (this.ethnicity == "") {
         this.ethnicity_empty = true;
         this.errors = true;
       }
-      if(this.gender === "Other" && this.gender_other.length === 0) {
+      if (this.gender === "Other" && this.gender_other.length === 0) {
         this.gender_input_empty = true;
         this.errors = true;
       }
-      if(this.ethnicity === "Other" && this.ethnicity_other.length === 0) {
+      if (this.ethnicity === "Other" && this.ethnicity_other.length === 0) {
         this.ethnicity_input_empty = true;
         this.errors = true;
       }
-      if(this.language_checkbox_other && this.language_other.length === 0) {
+      if (this.language_checkbox_other && this.language_other.length === 0) {
         this.language_input_empty = true;
         this.errors = true;
       }
-      else if(this.languages.length === 0 && !this.language_checkbox_other) {
+      else if (this.languages.length === 0 && !this.language_checkbox_other) {
         this.language_empty = true;
         this.errors = true;
       }
@@ -717,9 +701,9 @@ export default {
     save_data: async function(){
       this.detect_errors();
 
-      //if (!this.errors) {
-        //await this.writeUserData(data);
-      //}
+      if (this.saved) {
+        await this.writeUserData();
+      }
     },
     getUserData: async function(user_uid) {
       var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
@@ -728,8 +712,23 @@ export default {
       this.user_data = data;
       this.set_data();
     },
-    writeUserData: async function(data){
-      await firebase.database().ref('user-data/' + this.user_data.uid).update(data, function(error) {
+    writeUserData: async function() {
+      // var data = {
+      //   first_name: this.first_name,
+      //   last_name: this.last_name,
+      //   phone_number: this.phone_number,
+      //   gender: this.gender,
+      //   gender_other: this.gender_other,
+      //   ethnicity: this.ethnicity,
+      //   ethnicity_other: this.ethnicity_other,
+      //   languages: this.languages,
+      //   language_other: this.language_other
+      // };
+      var data = {
+        displayName: "d"
+      };
+      console.log(this.user_data.uid);
+      await firebase.database().ref('user-data/' + this.user_data.uid).set(data, function(error) {
             if (error) {
                 // The write failed...
                 console.log("Error: Could not update user data!");
@@ -743,58 +742,8 @@ export default {
         });
     }
   },
-  // mounted() {
-  //   let self = this;
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //       if (user) {
-  //           // User is signed in, create user if new
-  //           if (self.newUser){
-  //               self.createUser(user);
-  //           }
-  //           // Set user_data and check for updates to it
-  //           self.getUser(user.uid);
-  //           self.initLoop()
-  //       }
-  //       else {
-  //           // No user is signed in.
-  //           console.log("Error: No user is signed in!");
-  //       }
-  //   });
-  // },
-  // data() {
-  //     return {
-  //         newUser: this.$cookie.get('isNewUser'),
-  //         user_data: null
-  //     }
-  // },
+
   // methods: {
-  //     createUser: async function(user) {
-  //       await firebase.database().ref('user-data/' + user.uid).set({
-  //           displayName: user.displayName,
-  //           email: user.email,
-  //           uid: user.uid,
-  //           role: "volunteer",
-  //           site: null,
-  //           skills: null
-  //       }, function(error) {
-  //           if (error) {
-  //               // The write failed...
-  //               console.log("Error: Could not add user to database!");
-  //               console.log(error);
-  //               return false;
-  //           }
-  //           else {
-  //               // Data saved successfully!
-  //               return true;
-  //           }
-  //       });
-  //     },
-  //     getUser: async function(user_uid) {
-  //       var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
-  //           return snapshot.val();
-  //       });
-  //       this.user_data = data;
-  //     },
   //     initLoop: async function(user_id) {
   //       let self = this;
   //       await firebase.database().ref('user-data/' + user_id).on('value', function(snapshot) {

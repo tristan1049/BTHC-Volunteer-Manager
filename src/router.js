@@ -42,6 +42,11 @@ export default new Router({
       component: ()=>import('./views/Onboarding-4.vue')
     },
     {
+      path: '/onb5',
+      name: 'Onboarding-5',
+      component: ()=>import('./views/Onboarding-5.vue')
+    },
+    {
       path: '/second',
       name: 'secondurl',
       component: ()=>import('./views/SecondUrl.vue')

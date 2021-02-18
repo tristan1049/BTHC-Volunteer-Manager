@@ -28,7 +28,7 @@ export default {
     },
     data() {
         return {
-            pages: 3
+            pages: 4
         }
     }
 }

@@ -574,11 +574,6 @@ export default {
     let self = this;
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            // User is signed in, create user if new
-            if (self.newUser){
-                self.createUser(user);
-                self.$cookie.set('isNewUser', false);
-            }
             // Set user_data and check for updates to it
             self.getUserData(user.uid);
             //self.initLoop()
@@ -590,39 +585,20 @@ export default {
     });
   },
   methods: {
-    createUser: async function(user) {
-      await firebase.database().ref('user-data/' + user.uid).set({
-          displayName: user.displayName,
-          email: user.email,
-          uid: user.uid,
-          role: "volunteer",
-          site: null,
-          skills: null
-      }, function(error) {
-          if (error) {
-              // The write failed...
-              console.log("Error: Could not add user to database!");
-              console.log(error);
-              return false;
-          }
-          else {
-              // Data saved successfully!
-              return true;
-          }
-      });
-    },
     set_data: function(){
+      console.log("SET DATA USER DATA:")
+      console.log(this.user_data)
       if (this.user_data === null)
         return;
-      if (this.first_name)
+      if (this.user_data.first_name)
         this.first_name = this.user_data.first_name;
-      if (this.last_name)
+      if (this.user_data.last_name)
         this.last_name = this.user_data.last_name;
-      if (this.phone_number)
+      if (this.user_data.phone_number)
         this.phone_number = this.user_data.phone_number;
-      if (this.gender)
+      if (this.user_data.gender)
         this.gender = this.user_data.gender;
-      if (this.ethnicity)
+      if (this.user_data.ethnicity)
         this.ethnicity = this.user_data.ethnicity;
       if (this.user_data.gender_other) 
         this.gender_other = this.user_data.gender_other;
@@ -713,22 +689,30 @@ export default {
       this.set_data();
     },
     writeUserData: async function() {
-      // var data = {
-      //   first_name: this.first_name,
-      //   last_name: this.last_name,
-      //   phone_number: this.phone_number,
-      //   gender: this.gender,
-      //   gender_other: this.gender_other,
-      //   ethnicity: this.ethnicity,
-      //   ethnicity_other: this.ethnicity_other,
-      //   languages: this.languages,
-      //   language_other: this.language_other
-      // };
       var data = {
-        displayName: "d"
+        first_name: this.first_name,
+        last_name: this.last_name,
+        phone_number: this.phone_number,
+        gender: this.gender,
+        gender_other: this.gender_other,
+        ethnicity: this.ethnicity,
+        ethnicity_other: this.ethnicity_other,
+        languages: this.languages,
+        language_other: this.language_other,
+        onboarding_stage: 2
       };
+
+      //ERROR CHECK
+      if (!this.language_checkbox_other)
+        data.language_other = "";
+      if (data.gender != "Other")
+        data.gender_other = "";
+      if (data.ethnicity != "Other")
+        data.ethnicity_other = "";
+
+
       console.log(this.user_data.uid);
-      await firebase.database().ref('user-data/' + this.user_data.uid).set(data, function(error) {
+      await firebase.database().ref('user-data/' + this.user_data.uid).update(data, function(error) {
             if (error) {
                 // The write failed...
                 console.log("Error: Could not update user data!");

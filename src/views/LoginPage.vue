@@ -96,16 +96,45 @@ export default {
   name: "first",
   components: {},
   created() {
+    let self = this;
     var uiConfig = {
       callbacks: {
-        signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+        signInSuccessWithAuthResult: async function (authResult, redirectUrl) {
+        //signInSuccessWithAuthResult: (_authResult, _redirectUrl) => {
           // User successfully signed in.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
-          console.log(authResult);
+          //console.log(authResult);
+
+          console.log("REDIRECT URL:");
           console.log(redirectUrl);
-          setNewUser(authResult.additionalUserInfo.isNewUser);
-          goToOnboarding();
+
+          console.log("AUTH RESULT:");
+          console.log(authResult.user.uid);
+
+          //if new user, create database entry
+          if(authResult.additionalUserInfo.isNewUser){
+            self.createUser(authResult.user);
+          }
+
+          //grab user data
+          await self.getUserData(authResult.user.uid);
+          
+          console.log("USER DATA (LOGIN PAGE):");
+          console.log(self.user_data);
+
+          //send to page
+          //TODO: be smart about if they have completed onboarding and stuff
+          goToOnboarding(self.user_data.onboarding_stage);
+
+
+          //if(self.user_data.onboarding_stage)
+
+          //if have not completed onboarding --> send to approp. onboarding page
+          //else send to their dashboard
+        
+          //setNewUser(authResult.additionalUserInfo.isNewUser);
+          
           //this.$cookie.set('isNewUser', authResult.additionalUserInfo.isNewUser);
           //init_user(authResult.additionalUserInfo.isNewUser);
           //   page_manager("div.user-profile-screen");
@@ -121,7 +150,7 @@ export default {
       },
       // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
       signInFlow: "popup",
-      signInSuccessUrl: "<url-to-redirect-to-on-success>",
+      signInSuccessUrl: "#",
       signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -135,12 +164,12 @@ export default {
 
     this.ui.start("#firebaseui-auth-container", uiConfig);
 
-    const setNewUser = (newUser) => {
-      this.$cookie.set("isNewUser", newUser);
-    };
+    // const setNewUser = (newUser) => {
+    //   this.$cookie.set("isNewUser", newUser);
+    // };
 
-    const goToOnboarding = () => {
-      this.$router.push("/onb1");
+    const goToOnboarding = (page) => {
+      this.$router.push(`/onb${page+1}`);
     };
   },
   data() {
@@ -149,8 +178,36 @@ export default {
       ui:
         firebaseui.auth.AuthUI.getInstance() ||
         new firebaseui.auth.AuthUI(firebase.auth()),
+      user_data: null
     };
   },
+  methods: {
+    createUser: async function(user) {
+      await firebase.database().ref('user-data/' + user.uid).set({
+          displayName: user.displayName,
+          email: user.email,
+          uid: user.uid,
+          onboarding_stage: 0,
+      }, function(error) {
+          if (error) {
+              // The write failed...
+              console.log("Error: Could not add user to database!");
+              console.log(error);
+              return false;
+          }
+          else {
+              // Data saved successfully!
+              return true;
+          }
+      });
+    },
+    getUserData: async function(user_uid) {
+      var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
+          return snapshot.val();
+      });
+      this.user_data = data;
+    }
+  }
 };
 </script>
 

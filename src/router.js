@@ -13,13 +13,13 @@ export default new Router({
 
       path: '/',
       name: 'home',
-      component: () => import('./views/FirstUrl.vue')
+      component: () => import('./views/LoginPage.vue')
 
     },
     {
       path: '/first',
       name: 'firsturl',
-      component: ()=>import('./views/FirstUrl.vue')
+      component: ()=>import('./views/LoginPage.vue')
     },
     {
       path: '/onb1',

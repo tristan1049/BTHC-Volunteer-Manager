@@ -136,6 +136,9 @@
             </div>
 
             <!-- Terms and Conditions (selection) -->
+            <h6 style="color: red; font-size: 85%;" v-if="terms_reviewed_empty">
+              This is a required field.
+            </h6>
             <div class="mb-5 ml-2">
               <div class="custom-control custom-radio mb-3">
                 <input
@@ -143,6 +146,8 @@
                   class="custom-control-input"
                   id="select-terms-yes"
                   type="radio"
+                  value="yes"
+                  v-model="terms_reviewed"
                 />
                 <label
                   class="custom-control-label"
@@ -153,32 +158,17 @@
             </div>
 
             
-
+            <h5 style="color: red;" v-if="errors">
+              Correct errors before data can be saved.
+            </h5>
+            <h5 v-if="saved" class="text-success">
+              Your changes have been saved!
+            </h5>
             <!-- Save Button -->
             <div class="text-right">
-              <button class="btn btn-primary" data-toggle="modal" data-target="#modal-save">
+              <button class="btn btn-primary" @click="save_data()">
                 Save my progress!
               </button>
-            </div>
-
-            <!-- Save Confirmation Modal -->
-            <div class="modal fade" id="modal-save" tabindex="-1" role="dialog" aria-labelledby="save-modal" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title  font-weight-bold text-success">Saved</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Your changes have been saved
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok!</button>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <!-- Spacing -->
@@ -195,8 +185,12 @@
 </template>
 
 <script>
-//import "bootstrap/dist/js/bootstrap.bundle";
+import firebase from "firebase/app";
+import 'firebase/auth';
+import 'firebase/database';
+
 import PageChanger from "../components/PageChanger";
+
 export default {
   name: "Onboarding-4",
   components: {
@@ -204,78 +198,103 @@ export default {
   },
   data() {
     return {
-      active_el: 1
+      active_el: 1,
+      terms_reviewed: "",
+
+      errors: false,
+      saved: false,
+      terms_reviewed_empty: false
     }
+  },
+  async created() {
+    // Check if firebase is initialized, and if not, initialize it
+    if (firebase.apps.length === 0) {
+      const firebaseConfig = {
+        apiKey: "AIzaSyDlpces85D7-q4YXqQvk6Sd7K4ns_hxzIc",
+        authDomain: "bthc-volunteer-manager.firebaseapp.com",
+        databaseURL: "https://bthc-volunteer-manager-default-rtdb.firebaseio.com",
+        projectId: "bthc-volunteer-manager",
+        storageBucket: "bthc-volunteer-manager.appspot.com",
+        messagingSenderId: "460312984962",
+        appId: "1:460312984962:web:929cdb4bca23cea6dd239b",
+        measurementId: "G-YKPGZTFHW2",
+      };
+
+      await firebase.default.initializeApp(firebaseConfig);
+    }
+  },
+  mounted() {
+    let self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // Set user_data and check for updates to it
+            self.getUserData(user.uid);
+            //self.initLoop()
+        }
+        else {
+            // No user is signed in.
+            console.log("Error: No user is signed in!");
+        }
+    });
   },
   methods: {
     activate: async function(tab) {
       this.active_el = tab;
+    },
+    set_data: function () {
+      console.log("SET DATA USER DATA:");
+      console.log(this.user_data);
+      if (this.user_data === null)
+        return
+      if (this.user_data.terms_reviewed)
+        this.terms_reviewed = this.user_data.terms_reviewed;
+    },
+    detect_errors: function() {
+      this.errors = false;
+      this.saved = false;
+      this.terms_reviewed_empty = false;
+
+      if (this.terms_reviewed === "") {
+        this.terms_reviewed_empty = true;
+        this.errors = true;
+      }
+      if (!this.errors)
+        this.saved = true;
+    },
+    save_data: async function(){
+      this.detect_errors();
+
+      if (this.saved) {
+        await this.writeUserData();
+      }
+    },
+    getUserData: async function(user_uid) {
+      var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
+          return snapshot.val();
+      });
+      this.user_data = data;
+      this.set_data();
+    },
+    writeUserData: async function() {
+      var data = {
+        terms_reviewed: this.terms_reviewed,
+      };
+
+      // Update database
+      await firebase.database().ref('user-data/' + this.user_data.uid).update(data, function(error) {
+            if (error) {
+                // The write failed...
+                console.log("Error: Could not update user data!");
+                console.log(error);
+                return false;
+            }
+            else {
+                // Data saved successfully!
+                return true;
+            }
+        });
     }
   }
-  // mounted() {
-  //   let self = this;
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //       if (user) {
-  //           // User is signed in, create user if new
-  //           if (self.newUser){
-  //               self.createUser(user);
-  //           }
-  //           // Set user_data and check for updates to it
-  //           self.getUser(user.uid);
-  //           self.initLoop()
-  //       }
-  //       else {
-  //           // No user is signed in.
-  //           console.log("Error: No user is signed in!");
-  //       }
-  //   });
-  // },
-  // data() {
-  //     return {
-  //         newUser: this.$cookie.get('isNewUser'),
-  //         user_data: null
-  //     }
-  // },
-  // methods: {
-  //     createUser: async function(user) {
-  //       await firebase.database().ref('user-data/' + user.uid).set({
-  //           displayName: user.displayName,
-  //           email: user.email,
-  //           uid: user.uid,
-  //           role: "volunteer",
-  //           site: null,
-  //           skills: null
-  //       }, function(error) {
-  //           if (error) {
-  //               // The write failed...
-  //               console.log("Error: Could not add user to database!");
-  //               console.log(error);
-  //               return false;
-  //           }
-  //           else {
-  //               // Data saved successfully!
-  //               return true;
-  //           }
-  //       });
-  //     },
-  //     getUser: async function(user_uid) {
-  //       var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
-  //           return snapshot.val();
-  //       });
-  //       this.user_data = data;
-  //     },
-  //     initLoop: async function(user_id) {
-  //       let self = this;
-  //       await firebase.database().ref('user-data/' + user_id).on('value', function(snapshot) {
-  //           let data = [];
-  //           snapshot.forEach(function(childSnapshot) {
-  //               data.push(childSnapshot.val());
-  //               // Fill the local data property with Firebase data
-  //               self.user_data = data;
-  //   });
-  //       });
-  //     }
-  // }
 };
 </script>
 

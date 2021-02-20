@@ -508,14 +508,11 @@
 </template>
 
 <script>
-//import "bootstrap/dist/js/bootstrap.bundle";
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/database';
 
 import PageChanger from "../components/PageChanger";
-//import { Router } from 'express';
-//import 'bootstrap-select'
 
 export default {
   name: "Onboarding-2",
@@ -524,7 +521,6 @@ export default {
   },
   data() {
       return {
-          newUser: this.$cookie.get("isNewUser"),
           user_data: null,
           first_name: "",
           last_name: "",
@@ -586,8 +582,8 @@ export default {
   },
   methods: {
     set_data: function(){
-      console.log("SET DATA USER DATA:")
-      console.log(this.user_data)
+      console.log("SET DATA USER DATA:");
+      console.log(this.user_data);
       if (this.user_data === null)
         return;
       if (this.user_data.first_name)
@@ -613,7 +609,7 @@ export default {
     },
     detect_errors: function() {
       this.errors = false;
-      this.saved = false
+      this.saved = false;
       this.first_name_empty = false;
       this.last_name_empty = false;
       this.phone_number_empty = false;

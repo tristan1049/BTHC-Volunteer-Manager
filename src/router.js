@@ -47,6 +47,11 @@ export default new Router({
       component: ()=>import('./views/Onboarding-5.vue')
     },
     {
+      path: '/adminsitedata',
+      name: 'adminsitedata',
+      component: ()=>import('./views/Admin-edit_site_data.vue')
+    },
+    {
       path: '/second',
       name: 'secondurl',
       component: ()=>import('./views/SecondUrl.vue')

@@ -242,7 +242,8 @@ export default {
       var data = {
         volunteer_text: this.volunteer_text,
         tax_prof: this.tax_prof,
-        ce_credit: this.ce_credit
+        ce_credit: this.ce_credit,
+        onboarding_stage: 3
       };
 
       // Update database

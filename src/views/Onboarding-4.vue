@@ -57,7 +57,7 @@
             </div>
 
             <!-- Role Selection Button -->
-            <h3 class="h4 text-success font-weight-bold mb-1">
+            <!-- <h3 class="h4 text-success font-weight-bold mb-1">
               Please select a Volunteer Role.
             </h3>
             <h6 class="text-bold text-muted mb-4">You may only select one. To change this role after your registration is approved, please contact the <a href="https://www.bostontaxhelp.org/contact-us/">Volunteer Program Administrator.</a></h6>
@@ -79,6 +79,80 @@
                     <a @click="activate(2)" class="dropdown-item" href="#terms-financial-body">Financial Guide</a>
                     <a @click="activate(3)" class="dropdown-item" href="#terms-bilingual-body">Bi-lingual Interpreter</a>
                     <a @click="activate(4)" class="dropdown-item" href="#terms-community-body">Community Engagement Liaison</a>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+
+             <!-- Role Selection Radio Buttons -->
+            <h3 class="h4 text-success font-weight-bold mb-1">
+              Please select a Volunteer Role.
+            </h3>
+            <h6 class="text-bold text-muted mb-4">You may only select one. To change this role after your registration is approved, please contact the <a href="https://www.bostontaxhelp.org/contact-us/">Volunteer Program Administrator.</a></h6>
+            <h6 style="color: red; font-size: 85%;" v-if="role_empty">
+              'role' is a required field.
+            </h6>
+            <div class="row mb-4">
+              <div class="col-md-12">
+                <div class="mb-5">
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-taxpreparer"
+                      type="radio"
+                      value="Tax Preparer"
+                      v-model="role"
+                      @click="activate(1)"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-role-taxpreparer"
+                      >Tax Preparer</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-financialguide"
+                      type="radio"
+                      value="Financial Guide"
+                      v-model="role"
+                      @click="activate(2)"
+                    />
+                    <label class="custom-control-label" for="select-role-financialguide"
+                      >Financial Guide</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-bilingualinterpreter"
+                      type="radio"
+                      value="Bi-lingual Interpreter"
+                      v-model="role"
+                      @click="activate(3)"
+                    />
+                    <label class="custom-control-label" for="select-role-bilingualinterpreter"
+                      >Bi-lingual Interpreter</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-communityengagementliaison"
+                      type="radio"
+                      value="Community Engagement Liaison"
+                      v-model="role"
+                      @click="activate(4)"
+                    />
+                    <label class="custom-control-label" for="select-role-communityengagementliaison"
+                      >Community Engagement Liaison</label
+                    >
                   </div>
                 </div>
               </div>
@@ -136,7 +210,7 @@
             </div>
 
             <!-- Terms and Conditions (selection) -->
-            <h6 style="color: red; font-size: 85%;" v-if="terms_reviewed_empty">
+            <h6 style="color: red; font-size: 85%;" v-if="terms_empty">
               This is a required field.
             </h6>
             <div class="mb-5 ml-2">
@@ -147,7 +221,7 @@
                   id="select-terms-yes"
                   type="radio"
                   value="yes"
-                  v-model="terms_reviewed"
+                  v-model="terms"
                 />
                 <label
                   class="custom-control-label"
@@ -170,7 +244,7 @@
                 Save my progress!
               </button>
             </div>
-
+            {{ user_data }}
             <!-- Spacing -->
             <br />
             <br />
@@ -199,11 +273,14 @@ export default {
   data() {
     return {
       active_el: 1,
-      terms_reviewed: "",
+      user_data: null,
 
+      role: "",
+      role_empty: false,
+      terms: "",
+      terms_empty: false,
       errors: false,
       saved: false,
-      terms_reviewed_empty: false
     }
   },
   async created() {
@@ -241,25 +318,41 @@ export default {
     activate: async function(tab) {
       this.active_el = tab;
     },
-    set_data: function () {
-      console.log("SET DATA USER DATA:");
-      console.log(this.user_data);
+    set_data: function(){
       if (this.user_data === null)
-        return
-      if (this.user_data.terms_reviewed)
-        this.terms_reviewed = this.user_data.terms_reviewed;
+        return;
+      if (this.user_data.vol_role)
+        this.role = this.user_data.vol_role;
+      if (this.user_data.terms)
+        this.terms = this.user_data.terms;
+      
+      if(this.role === "Tax Preparer")
+        this.activate(1);
+      if(this.role === "Financial Guide")
+        this.activate(2);
+      if(this.role === "Bi-lingual Interpreter")
+        this.activate(3);
+      if(this.role === "Community Engagement Liaison")
+        this.activate(4);
     },
     detect_errors: function() {
       this.errors = false;
       this.saved = false;
-      this.terms_reviewed_empty = false;
+      this.role_empty = false;
 
-      if (this.terms_reviewed === "") {
-        this.terms_reviewed_empty = true;
+      if (this.role.length === 0){
+        this.role_empty = true;
         this.errors = true;
       }
-      if (!this.errors)
+
+      if (this.terms.length === 0){
+        this.terms_empty = true;
+        this.errors = true;
+      }
+
+      if (!this.errors) {
         this.saved = true;
+      }
     },
     save_data: async function(){
       this.detect_errors();
@@ -277,10 +370,12 @@ export default {
     },
     writeUserData: async function() {
       var data = {
-        terms_reviewed: this.terms_reviewed,
+        vol_role: this.role,
+        terms: this.terms,
+        onboarding_stage: 4
       };
 
-      // Update database
+      console.log(this.user_data.uid);
       await firebase.database().ref('user-data/' + this.user_data.uid).update(data, function(error) {
             if (error) {
                 // The write failed...

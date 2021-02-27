@@ -5,15 +5,84 @@
         <div class="col-10">
           <div class="card shadow-lg p-5 my-5">
            
-           <!-- Learn about the different roles (heading) -->
+           
             <h3 class="h4 text-success font-weight-bold mb-1">
-              There are 4 types of Volunteer Roles.
+              Please upload a file
             </h3>
+            <h6 class="text-bold text-muted mb-4">The only supported file is a .csv (comma separated value file). If you have a spreadsheet or google sheet download it or "save as" a .csv</h6>
             <input type="file" ref="myFile" @change="selectedFile()"><br/>
+            
+            <!-- Choose a Role -->
+            <h3 class="h4 text-success font-weight-bold mb-4">
+              Please choose a role to add site data for
+            </h3>
+
+            <div class="row mb-4">
+              <div class="col-md-12">
+                <div class="mb-5">
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-taxpreparer"
+                      type="radio"
+                      value="Tax Preparer"
+                      v-model="role"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-role-taxpreparer"
+                      >Tax Preparer</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-financialguide"
+                      type="radio"
+                      value="Financial Guide"
+                      v-model="role"
+                    />
+                    <label class="custom-control-label" for="select-role-financialguide"
+                      >Financial Guide</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-bilingualinterpreter"
+                      type="radio"
+                      value="Bi-lingual Interpreter"
+                      v-model="role"
+                    />
+                    <label class="custom-control-label" for="select-role-bilingualinterpreter"
+                      >Bi-lingual Interpreter</label
+                    >
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input
+                      name="select-role"
+                      class="custom-control-input"
+                      id="select-role-communityengagementliaison"
+                      type="radio"
+                      value="Community Engagement Liaison"
+                      v-model="role"
+                    />
+                    <label class="custom-control-label" for="select-role-communityengagementliaison"
+                      >Community Engagement Liaison</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
             <textarea v-model="text"></textarea>
 
             <div class="table-div">
-              <b-table striped hover :items="filtered_table_json" 
+              <b-table striped hover :items="table_array" 
               @row-clicked="selectRow" selectable select-mode="single" 
               selected-variant = "primary">
                 <!-- <template #cell(actions)="row">
@@ -31,7 +100,7 @@
             <JsonCSV class="btn btn-primary" :data="filtered_table_json" name="location-data.csv">
               Download Data As CSV
               <img src="download_icon.png">
-          </JsonCSV>
+            </JsonCSV>
 
             <!-- Spacing -->
             <br />
@@ -55,6 +124,7 @@ import 'firebase/database';
 
 import PageChanger from "../components/PageChanger";
 import JsonCSV from 'vue-json-csv'
+//import { componentsPlugin } from 'bootstrap-vue';
 
 var csv = require('csvtojson');
 
@@ -76,9 +146,9 @@ export default {
       input_json: null,
       compiled_json: {},
       filtered_json: {},
+      table_array: {},
 
-      role: "",
-      role_empty: false,
+      role: "Tax Preparer",
     }
   },
   async created() {
@@ -136,21 +206,61 @@ export default {
         csv()
           .fromString(this.text)
           .then((jsonObj)=>{
-              this.input_jsonm = jsonObj;
-              console.log(this.input_jsonm);
+              this.input_json = jsonObj;
+              console.log(this.input_json);
+              this.parseFile();
           })
       }     
 
       //check read error
       reader.onerror = evt => {
         console.error(evt);
+      }      
+    },
+    parseFile(){
+
+      //add changes
+      //this.compiled_json;
+
+      for(var i = 0; i < this.input_json.length; i++){
+        
+        var new_el = {};
+        var name = "";
+
+        for (const property in this.input_json[i]) {
+
+          console.log(property);
+          var cleaned = property.replace(/[^a-zA-Z]/g, "").toLowerCase();
+          console.log(cleaned);
+
+          if(cleaned === "sitename"){
+            name = this.input_json[i][property];
+            name = name.replace(/[^a-zA-Z1234567890]/g, "").toLowerCase()
+            new_el["Site Name"] = this.input_json[i][property];
+          }
+          else if(cleaned === "address")
+            new_el["Address"] = this.input_json[i][property];
+          else{
+            if(this.input_json[i][property] != null && this.input_json[i][property].length != 0){
+              if(new_el["Hours of Operation"] == null)
+                new_el["Hours of Operation"] = this.input_json[i][property];
+              else
+                new_el["Hours of Operation"] += ", " + this.input_json[i][property];
+            }
+          }
+        }
+
+        if(this.compiled_json[name] == null){
+          this.compiled_json[name] = new_el;
+          this.compiled_json[name]["Roles"] = {}
+        }
+        this.compiled_json[name]["Roles"][this.role] = true; 
       }
 
-    //add changes
+      this.table_array = Object.values(this.compiled_json);
+      console.log(this.compiled_json);
 
-      
-    },
-
+    },   
     applyFilter() {
       
       var prop_contains = {City: "Boston"};

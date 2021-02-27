@@ -12,6 +12,12 @@ export default {
 };
 </script>
 
+<!--<style lang="scss">
+
+// @import '/assets/vendor/font-awesome/css/font-awesome.css';
+// @import '/assets/vendor/font-awesome/css/font-awesome.min.css';
+// </style> -->
+
 <style>
 body{
 font-family: Helvetica, sans-serif;

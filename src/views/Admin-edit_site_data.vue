@@ -5,21 +5,35 @@
         <div class="col-10">
           <div class="card shadow-lg p-5 my-5">
            
-           
-            <h3 class="h4 text-success font-weight-bold mb-1">
-              Please upload a file
-            </h3>
-            <h6 class="text-bold text-muted mb-4">The only supported file is a .csv (comma separated value file). If you have a spreadsheet or google sheet download it or "save as" a .csv</h6>
-            <input type="file" ref="myFile" @change="selectedFile()"><br/>
+
+           <div class="row mb-1">
+              <div class="col-md-6">
+                <h3 class="h4 text-success font-weight-bold mb-1">
+                  Please upload a file
+                </h3>
+                <h6 class="text-bold text-muted mb-4">The only supported file is a .csv (comma separated value file). If you have a spreadsheet or google sheet download it or "save as" a .csv</h6>
+                <div class="mb-5">
+                  <input type="file" ref="myFile" @change="selectedFile()">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h3 class="h4 text-success font-weight-bold mb-1">
+                  This is a test box
+                </h3>
+                <h6 class="text-bold text-muted mb-4">If it's empty, your file was not uploaded properly.</h6>
+                  <textarea v-model="text"></textarea>
+              </div>
+            </div>
             
-            <!-- Choose a Role -->
+
+           <!-- Choose a Role -->
             <h3 class="h4 text-success font-weight-bold mb-4">
               Please choose a role to add site data for
             </h3>
 
-            <div class="row mb-4">
-              <div class="col-md-12">
-                <div class="mb-5">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="mb-1">
                   <div class="custom-control custom-radio mb-3">
                     <input
                       name="select-role"
@@ -78,13 +92,27 @@
               </div>
             </div>
 
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <button class="btn btn-primary" @click="parseFile()">
+                  Add to chart
+                </button>
+              </div>
+            </div>
+           
+           
             
-            <textarea v-model="text"></textarea>
-
+            <h3 class="h4 text-success font-weight-bold mb-1 mt-4">
+              Site Data
+            </h3>
+            <h6 class="text-bold text-muted mb-4">Updates as you add data. See more options below.</h6>
             <div class="table-div">
-              <b-table striped hover :items="table_array" 
+              <b-table striped hover :items="table_array" :fields="table_fields"
               @row-clicked="selectRow" selectable select-mode="single" 
               selected-variant = "primary">
+                <template #cell(Roles)="data">
+                  <span v-html="data.value"></span>
+                </template>
                 <!-- <template #cell(actions)="row">
                   <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
                     Info modal
@@ -93,21 +121,72 @@
               </b-table>
             </div>
 
-            <button class="btn btn-primary" @click="applyFilter()">
-                Apply filter.
+            <!-- Table Buttons -->
+            <div class="row mb-4 mt-3">
+              <div class="col-md-4 text-center">
+                <button class="btn btn-primary button-center-fill" @click="parseFile()">
+                  Save to Database
+                </button>
+              </div>
+              <div class="col-md-4 text-center">
+                <button class="btn btn-primary button-center-fill" @click="clearTable()">
+                  Clear Chart
+                </button>
+              </div>
+              <div class="col-md-4 text-center">
+                <JsonCSV class="btn btn-primary button-center-fill" :data="table_array" name="location-data.csv">
+                  Download as CSV
+                </JsonCSV>
+              </div>
+            </div>
+
+            <button type="button" class="btn  mb-3 btn-block btn-primary"><!----><!----><!---->
+              Default
             </button>
 
-            <JsonCSV class="btn btn-primary" :data="filtered_table_json" name="location-data.csv">
-              Download Data As CSV
-              <img src="download_icon.png">
-            </JsonCSV>
 
-            <!-- Spacing -->
-            <br />
-            <br />
+            <!-- Modal -->
+             <div tabindex="-1" role="dialog" class="modal fade d-none" style="display: none" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h6 id="modal-title-default" class="modal-title">
+                      Type your modal title
+                    </h6>
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="close">
+                      <span aria-hidden="true"> × </span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      Far far away, behind the word mountains, far from the
+                      countries Vokalia and Consonantia, there live the blind
+                      texts. Separated they live in Bookmarksgrove right at the
+                      coast of the Semantics, a large language ocean.
+                    </p>
+                    <p>
+                      A small river named Duden flows by their place and
+                      supplies it with the necessary regelialia. It is a
+                      paradisematic country, in which roasted parts of sentences
+                      fly into your mouth.
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">
+                        <!----><!----><!---->Save changes
+                      </button>
+                      <button type="button" class="btn ml-auto btn-link">
+                        <!----><!----><!---->Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <!-- Page changing UI -->
-            <PageChanger v-bind:page="4"/>
+            <!-- <button class="btn btn-primary" @click="parseFile()">
+                Apply filter.
+            </button> -->
+            
           </div>
         </div>
       </div>
@@ -122,7 +201,7 @@ import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/database';
 
-import PageChanger from "../components/PageChanger";
+//import PageChanger from "../components/PageChanger";
 import JsonCSV from 'vue-json-csv'
 //import { componentsPlugin } from 'bootstrap-vue';
 
@@ -131,7 +210,7 @@ var csv = require('csvtojson');
 export default {
   name: "Onboarding-5",
   components: {
-    PageChanger,
+    //PageChanger,
     JsonCSV
   },
   data() {
@@ -146,7 +225,10 @@ export default {
       input_json: null,
       compiled_json: {},
       filtered_json: {},
-      table_array: {},
+      table_array: [],
+      table_fields: ["Site Name", "Address", "Hours of Operation", "Roles"],
+
+      show_save_modal: false,
 
       role: "Tax Preparer",
     }
@@ -208,7 +290,6 @@ export default {
           .then((jsonObj)=>{
               this.input_json = jsonObj;
               console.log(this.input_json);
-              this.parseFile();
           })
       }     
 
@@ -229,9 +310,9 @@ export default {
 
         for (const property in this.input_json[i]) {
 
-          console.log(property);
+          //console.log(property);
           var cleaned = property.replace(/[^a-zA-Z]/g, "").toLowerCase();
-          console.log(cleaned);
+          //console.log(cleaned);
 
           if(cleaned === "sitename"){
             name = this.input_json[i][property];
@@ -251,15 +332,32 @@ export default {
         }
 
         if(this.compiled_json[name] == null){
-          this.compiled_json[name] = new_el;
-          this.compiled_json[name]["Roles"] = {}
+          this.compiled_json[name] = new_el; 
+          this.compiled_json[name]["Roles"] = '';
+          this.compiled_json[name]["roles_dict"] = {};
         }
-        this.compiled_json[name]["Roles"][this.role] = true; 
+        if(!this.compiled_json[name]["roles_dict"][this.role]){
+          var color_class = 'badge-primary';
+          if(this.role === "Tax Preparer")
+            color_class = 'badge-primary';
+          if(this.role === "Financial Guide")
+            color_class = 'badge-success';
+          if(this.role === "Bi-lingual Interpreter")
+            color_class = 'badge-warning';
+          if(this.role === "Community Engagement Liaison")
+            color_class = 'badge-info';
+          this.compiled_json[name]["Roles"] += '<span class = "badge text-uppercase '+ color_class + '">' +  this.role + '</span>'; 
+        } 
+        this.compiled_json[name]["roles_dict"][this.role] = true; 
       }
 
       this.table_array = Object.values(this.compiled_json);
       console.log(this.compiled_json);
 
+    },
+    clearTable(){
+      this.compiled_json = {};
+      this.table_array = [];
     },   
     applyFilter() {
       
@@ -363,6 +461,10 @@ export default {
 }
 .text-center {
   text-align: center;
+}
+.button-center-fill {
+  text-align: center;
+  width: 100%;
 }
 .floating-card{
   padding-top: 30px;

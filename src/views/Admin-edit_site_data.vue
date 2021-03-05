@@ -123,61 +123,44 @@
 
             <!-- Table Buttons -->
             <div class="row mb-4 mt-3">
-              <div class="col-md-4 text-center">
-                <button class="btn btn-primary button-center-fill" @click="parseFile()">
+              <div class="col-md-3 text-center">
+                <button class="btn btn-primary button-center-fill" data-toggle="modal" data-target="#modal-save">
                   Save to Database
                 </button>
               </div>
-              <div class="col-md-4 text-center">
+              <div class="col-md-3 text-center">
+                <button class="btn btn-primary button-center-fill" @click="getSiteData()">
+                  Pull from Database
+                </button>
+              </div>
+              <div class="col-md-3 text-center">
                 <button class="btn btn-primary button-center-fill" @click="clearTable()">
                   Clear Chart
                 </button>
               </div>
-              <div class="col-md-4 text-center">
+              <div class="col-md-3 text-center">
                 <JsonCSV class="btn btn-primary button-center-fill" :data="table_array" name="location-data.csv">
                   Download as CSV
                 </JsonCSV>
               </div>
             </div>
 
-            <button type="button" class="btn  mb-3 btn-block btn-primary"><!----><!----><!---->
-              Default
-            </button>
-
-
-            <!-- Modal -->
-             <div tabindex="-1" role="dialog" class="modal fade d-none" style="display: none" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
+            <!-- Save Confirmation Modal -->
+            <div class="modal fade" id="modal-save" tabindex="-1" role="dialog" aria-labelledby="save-modal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h6 id="modal-title-default" class="modal-title">
-                      Type your modal title
-                    </h6>
-                    <button type="button" data-dismiss="modal" aria-label="Close" class="close">
-                      <span aria-hidden="true"> × </span>
+                    <h5 class="modal-title  font-weight-bold text-warning">Are you sure you want to continue?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <p>
-                      Far far away, behind the word mountains, far from the
-                      countries Vokalia and Consonantia, there live the blind
-                      texts. Separated they live in Bookmarksgrove right at the
-                      coast of the Semantics, a large language ocean.
-                    </p>
-                    <p>
-                      A small river named Duden flows by their place and
-                      supplies it with the necessary regelialia. It is a
-                      paradisematic country, in which roasted parts of sentences
-                      fly into your mouth.
-                    </p>
+                    By continuing, you will overwrite all site data in the database with the data in the chart.
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">
-                        <!----><!----><!---->Save changes
-                      </button>
-                      <button type="button" class="btn ml-auto btn-link">
-                        <!----><!----><!---->Close
-                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Stop! Take me back.</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="saveSiteData()">Ok! Let's go.</button>
                   </div>
                 </div>
               </div>
@@ -218,19 +201,19 @@ export default {
       user_data: null,
 
       text: "",
-      filtered_table_json: null,
-      table_json: null,
+      //filtered_table_json: null,
+      //table_json: null,
 
 
       input_json: null,
       compiled_json: {},
-      filtered_json: {},
+      //filtered_json: {},
+
       table_array: [],
       table_fields: ["Site Name", "Address", "Hours of Operation", "Roles"],
 
       show_save_modal: false,
-
-      role: "Tax Preparer",
+      role: "Tax Preparer"
     }
   },
   async created() {
@@ -254,9 +237,7 @@ export default {
     let self = this;
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            // Set user_data and check for updates to it
             self.getUserData(user.uid);
-            //self.initLoop()
         }
         else {
             // No user is signed in.
@@ -318,6 +299,9 @@ export default {
             name = this.input_json[i][property];
             name = name.replace(/[^a-zA-Z1234567890]/g, "").toLowerCase()
             new_el["Site Name"] = this.input_json[i][property];
+            
+            new_el["Site Name"] = this.input_json[i][property];
+            new_el["name_cleaned"] = name;
           }
           else if(cleaned === "address")
             new_el["Address"] = this.input_json[i][property];
@@ -352,86 +336,61 @@ export default {
       }
 
       this.table_array = Object.values(this.compiled_json);
-      console.log(this.compiled_json);
+      //console.log(this.compiled_json);
 
     },
     clearTable(){
       this.compiled_json = {};
       this.table_array = [];
     },   
-    applyFilter() {
+    // applyFilter() {
       
-      var prop_contains = {City: "Boston"};
-      var filtered_table_json = [];
+    //   var prop_contains = {City: "Boston"};
+    //   var filtered_table_json = [];
 
-      for(var i = 0; i < this.table_json.length; i++){
+    //   for(var i = 0; i < this.table_json.length; i++){
         
-        var new_el = {};
-        var do_include = true;
+    //     var new_el = {};
+    //     var do_include = true;
 
-        for (const property in this.table_json[i]) {
+    //     for (const property in this.table_json[i]) {
 
-          new_el[property] = this.table_json[i][property];
-          if(property in prop_contains){
-            if (!this.table_json[i][property].includes(prop_contains[property])){
-              do_include = false;
-            }
-          }
-        }
+    //       new_el[property] = this.table_json[i][property];
+    //       if(property in prop_contains){
+    //         if (!this.table_json[i][property].includes(prop_contains[property])){
+    //           do_include = false;
+    //         }
+    //       }
+    //     }
 
-        if(do_include)
-          filtered_table_json.push(new_el);
-      }
+    //     if(do_include)
+    //       filtered_table_json.push(new_el);
+    //   }
 
-      console.log(filtered_table_json);
-      this.filtered_table_json = filtered_table_json;
+    //   console.log(filtered_table_json);
+    //   this.filtered_table_json = filtered_table_json;
     
-    },
-    set_data: function(){
-      if (this.user_data === null)
-        return;
-      // if (this.user_data.vol_role)
-      //   this.role = this.vol_role;
-    },
-    detect_errors: function() {
-      // this.errors = false;
-      // this.saved = false;
-      // this.role_empty = false;
-
-      // if (this.role.length === 0){
-      //   this.role_empty = true;
-      //   this.errors = true;
-      // }
-
-      // if (!this.errors) {
-      //   this.saved = true;
-      // }
-    },
-    save_data: async function(){
-      this.detect_errors();
-
-      if (this.saved) {
-        //await this.writeUserData();
-      }
-    },
+    // },
     getUserData: async function(user_uid) {
       var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
           return snapshot.val();
       });
       this.user_data = data;
-      this.set_data();
     },
-    writeUserData: async function() {
-      var data = {
-        vol_role: this.role,
-        onboarding_stage: 5
-      };
+    getSiteData: async function() {
+      this.clearTable();
+      var data = await firebase.database().ref('site-data').once('value').then((snapshot) => {
+          return snapshot.val();
+      });
+      this.compiled_json = data;
+      this.table_array = Object.values(this.compiled_json);
+    },
+    saveSiteData: async function() {
 
-      console.log(this.user_data.uid);
-      await firebase.database().ref('user-data/' + this.user_data.uid).update(data, function(error) {
+      await firebase.database().ref('site-data').set(this.compiled_json, function(error) {
             if (error) {
                 // The write failed...
-                console.log("Error: Could not update user data!");
+                console.log("Error: Could not update database with site data!");
                 console.log(error);
                 return false;
             }

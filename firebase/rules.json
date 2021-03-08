@@ -1,0 +1,40 @@
+//RULES FOR THE DATABASE - backup copy
+// Allows for 3 types of users: [super-admins, site-admins, volunteers]
+
+{
+  "rules": {
+    "user-data": {
+      "$uid": {
+        // Allow only authenticated users access to their data
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+      },
+      // Allow site admins to access all user data
+    	// ".read": "root.child('site-admins').hasChild(auth.uid)",
+    	// ".write": "root.child('site-admins').hasChild(auth.uid)",
+    },
+    "site-data": {
+      "$site":  {
+        "user-data": {
+          "$uid": {
+            // Allow only authenticated users access to their site data
+            //".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && auth.uid == $uid",
+          }
+        },
+        //Allow site admins to see all data associated with their site
+        ".read": "root.child('site-admins').child(auth.uid).val() === $site",
+    		".write": "root.child('site-admins').child(auth.uid).val() === $site",
+      },
+      //Allow all users to read site data
+      ".read": "auth != null",
+    },
+    "misc-data": {
+      // Allow everyone to read misc data, like the potential volunteer roles
+    	".read" : "auth != null"
+    },
+    // Allow super users to access everything
+    ".read": "root.child('super-admins').hasChild(auth.uid)",
+    ".write": "root.child('super-admins').hasChild(auth.uid)",
+  }
+}

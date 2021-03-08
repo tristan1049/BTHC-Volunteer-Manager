@@ -5,33 +5,72 @@
         <div class="col-10">
           <div class="card shadow-lg p-5 my-5">
            
-           <!-- Learn about the different roles (heading) -->
+           <!-- Select first choice site -->
             <h3 class="h4 text-success font-weight-bold mb-1">
-              There are 4 types of Volunteer Roles.
+              First choice
             </h3>
-            <input type="file" ref="myFile" @change="selectedFile()"><br/>
-            <textarea v-model="text"></textarea>
+            <h6 class="text-bold text-muted mb-4">Please select the site you would like to work at.
+              You are not guaranteed to get your first choice.
+            </h6>
 
-            <div class="table-div">
-              <b-table striped hover :items="filtered_table_json" 
-              @row-clicked="selectRow" selectable select-mode="single" 
-              selected-variant = "primary">
-                <!-- <template #cell(actions)="row">
-                  <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-                    Info modal
-                  </b-button>
-                </template> -->
+            <div class="table-div mb-3">
+              <b-table striped hover :items="table_array" :fields="table_fields" 
+              @row-clicked="selectRowFirst" selectable select-mode="single" 
+              selected-variant = "primary" ref="tab1">
+                <template #cell(Roles)="data">
+                  <span v-html="data.value"></span>
+                </template>
               </b-table>
             </div>
 
-            <button class="btn btn-primary" @click="applyFilter()">
-                Apply filter.
-            </button>
 
-            <JsonCSV class="btn btn-primary" :data="filtered_table_json" name="location-data.csv">
-              Download Data As CSV
-              <img src="download_icon.png">
-          </JsonCSV>
+            
+            <h6 style="color: red; font-size: 85%;" v-if="first_empty">
+              Please select a first choice site. Selected sites are purple.
+            </h6>
+
+            <br />
+
+            <!-- Select second choice site -->
+            <h3 class="h4 text-success font-weight-bold mb-1">
+              Second choice
+            </h3>
+            <h6 class="text-bold text-muted mb-4">Please select the site you would like to work at if the first is full.
+              You are not guaranteed to get your second choice.
+            </h6>
+
+            <div class="table-div mb-3">
+              <b-table striped hover :items="table_array" :fields="table_fields" 
+              @row-clicked="selectRowSecond" selectable select-mode="single" 
+              selected-variant = "primary" ref="tab2">
+                <template #cell(Roles)="data">
+                  <span v-html="data.value"></span>
+                </template>
+              </b-table>
+            </div>
+
+            <h6 style="color: red; font-size: 85%;" v-if="second_empty">
+              Please select a second choice site. Selected sites are purple.
+            </h6>
+            <h6 style="color: red; font-size: 85%;" v-if="equal_error">
+              Please select a different first and second choice.
+            </h6>
+
+            <br />
+
+            <h5 style="color: red;" v-if="errors">
+              Correct errors before data can be saved.
+            </h5>
+            <h5 v-if="saved" class="text-success">
+              Your changes have been saved!
+            </h5>
+            <!-- Save Button -->
+            <div class="text-right">
+              <button class="btn btn-primary" @click="save_data()">
+                Save my progress!
+              </button>
+            </div>
+            {{ user_data }}
 
             <!-- Spacing -->
             <br />
@@ -54,31 +93,35 @@ import 'firebase/auth';
 import 'firebase/database';
 
 import PageChanger from "../components/PageChanger";
-import JsonCSV from 'vue-json-csv'
+//import JsonCSV from 'vue-json-csv'
 
-var csv = require('csvtojson');
+//var csv = require('csvtojson');
 
 export default {
   name: "Onboarding-5",
   components: {
     PageChanger,
-    JsonCSV
+    //JsonCSV
   },
   data() {
     return{
       user_data: null,
 
-      text: "",
-      filtered_table_json: null,
-      table_json: null,
-
-
-      input_json: null,
       compiled_json: {},
       filtered_json: {},
 
-      role: "",
-      role_empty: false,
+      table_array: [],
+      table_fields: ["Site Name", "Address", "Hours of Operation", "Roles"],
+
+      first_choice: null,
+      second_choice: null,
+
+      first_empty: false,
+      second_empty: false,
+      equal_error: false,
+
+      errors: false,
+      saved: false,
     }
   },
   async created() {
@@ -102,9 +145,9 @@ export default {
     let self = this;
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            // Set user_data and check for updates to it
+            // Set user_data
             self.getUserData(user.uid);
-            //self.initLoop()
+
         }
         else {
             // No user is signed in.
@@ -113,97 +156,153 @@ export default {
     });
   },
   methods: {
-    selectRow(row){
-      console.log(row["Site Name"]);
-      console.log(row);
+    selectRowFirst(row){
+      if(this.first_choice == row["name_cleaned"])
+        this.first_choice = null;
+      else
+        this.first_choice = row["name_cleaned"];
+
+      console.log(this.first_choice);
     },
-    selectedFile() {
-
-      //open file    
-      var file = this.$refs.myFile.files[0];
-      
-      if(!file){
-        console.log("Error reading file!");
-        return;
-      }
-
-      var reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
-      reader.onload =  evt => {
-        this.text = evt.target.result;
-
-        //read json from csv
-        csv()
-          .fromString(this.text)
-          .then((jsonObj)=>{
-              this.input_jsonm = jsonObj;
-              console.log(this.input_jsonm);
-          })
-      }     
-
-      //check read error
-      reader.onerror = evt => {
-        console.error(evt);
-      }
-
-    //add changes
-
-      
+    selectRowSecond(row){
+      if(this.second_choice == row["name_cleaned"])
+        this.second_choice = null;
+      else
+        this.second_choice = row["name_cleaned"];
+      console.log(this.second_choice);
     },
-
     applyFilter() {
       
-      var prop_contains = {City: "Boston"};
-      var filtered_table_json = [];
+      if (this.user_data === null)
+        return;
 
-      for(var i = 0; i < this.table_json.length; i++){
-        
-        var new_el = {};
-        var do_include = true;
+      var role = this.user_data["vol_role"];
 
-        for (const property in this.table_json[i]) {
-
-          new_el[property] = this.table_json[i][property];
-          if(property in prop_contains){
-            if (!this.table_json[i][property].includes(prop_contains[property])){
-              do_include = false;
-            }
-          }
+      for(const property in this.compiled_json){
+        if(this.compiled_json[property]["roles_dict"][role])
+        {
+          this.filtered_json[this.compiled_json[property]["name_cleaned"]] = this.compiled_json[property]
         }
-
-        if(do_include)
-          filtered_table_json.push(new_el);
       }
 
-      console.log(filtered_table_json);
-      this.filtered_table_json = filtered_table_json;
+      this.table_array = Object.values(this.filtered_json);
+
+      // var prop_contains = {City: "Boston"};
+      // var filtered_table_json = [];
+
+      // for(var i = 0; i < this.table_json.length; i++){
+        
+      //   var new_el = {};
+      //   var do_include = true;
+
+      //   for (const property in this.table_json[i]) {
+
+      //     new_el[property] = this.table_json[i][property];
+      //     if(property in prop_contains){
+      //       if (!this.table_json[i][property].includes(prop_contains[property])){
+      //         do_include = false;
+      //       }
+      //     }
+      //   }
+
+      //   if(do_include)
+      //     filtered_table_json.push(new_el);
+      // }
+
+      // console.log(filtered_table_json);
+      // this.filtered_table_json = filtered_table_json;
     
     },
     set_data: function(){
       if (this.user_data === null)
         return;
+
+      setTimeout(() => { this.clickRows(this.user_data.first_choice, this.user_data.second_choice); }, 50);
+      
+
+      //https://jsfiddle.net/sem409uc/
+
       // if (this.user_data.vol_role)
       //   this.role = this.vol_role;
     },
+    clickRows(first, second) {
+
+      var tab1 = this.$refs.tab1.$el;
+      var tabBody1 = tab1.getElementsByTagName('tbody')[0];
+      var tabRows1 = tabBody1.getElementsByTagName('tr');
+
+      var tab2 = this.$refs.tab2.$el;
+      var tabBody2 = tab2.getElementsByTagName('tbody')[0];
+      var tabRows2 = tabBody2.getElementsByTagName('tr');
+      
+      console.log(tab1)
+      console.log(tabBody1)
+      console.log(tabRows1)
+
+      var index_first = -1;
+      var index_second = -1;
+
+      var counter = 0;
+      for(const property in this.filtered_json){
+        console.log(this.filtered_json[property].name_cleaned)
+        if (first === this.filtered_json[property].name_cleaned)
+          index_first = counter;
+        if (second === this.filtered_json[property].name_cleaned)
+          index_second = counter;
+        counter += 1;
+      }
+
+      console.log(index_first);
+      console.log(index_second);
+
+      console.log(tabRows1);
+      console.log(tabRows2);
+
+      console.log(tabRows1[1]);
+      console.log(tabRows2[0]);
+      if(index_first != -1){
+        tabRows1[index_first].click();
+        this.first_choice = first;
+      }
+        
+      if(index_second != -1){
+        tabRows2[index_second].click();
+        this.second_choice = second;
+      }
+    },
     detect_errors: function() {
-      // this.errors = false;
-      // this.saved = false;
-      // this.role_empty = false;
+      this.errors = false;
+      this.saved = false;
 
-      // if (this.role.length === 0){
-      //   this.role_empty = true;
-      //   this.errors = true;
-      // }
+      this.first_empty = false;
+      this.second_empty = false;
+      this.equal_error = false;
 
-      // if (!this.errors) {
-      //   this.saved = true;
-      // }
+      if (this.first_choice == null){
+        this.first_empty = true;
+        this.errors = true;
+      }
+
+      if (this.second_choice == null){
+        this.second_empty = true;
+        this.errors = true;
+      }
+
+      if (this.first_choice === this.second_choice && this.first_choice != null){
+        this.equal_error = true;  
+        this.errors = true;
+      }
+
+      if (!this.errors) {
+        this.saved = true;
+      }
     },
     save_data: async function(){
+      
       this.detect_errors();
 
       if (this.saved) {
-        //await this.writeUserData();
+        await this.writeUserData();
       }
     },
     getUserData: async function(user_uid) {
@@ -211,12 +310,20 @@ export default {
           return snapshot.val();
       });
       this.user_data = data;
+      this.getSiteData();
+    },
+    getSiteData: async function() {
+      var data = await firebase.database().ref('site-data').once('value').then((snapshot) => {
+          return snapshot.val();
+      });
+      this.compiled_json = data;
+      this.applyFilter();
       this.set_data();
     },
     writeUserData: async function() {
       var data = {
-        vol_role: this.role,
-        onboarding_stage: 5
+        first_choice: this.first_choice,
+        second_choice: this.second_choice, 
       };
 
       console.log(this.user_data.uid);

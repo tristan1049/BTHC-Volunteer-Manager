@@ -59,15 +59,28 @@
             <br />
 
             <h5 style="color: red;" v-if="errors">
-              Correct errors before data can be saved.
+              Correct errors on this page before form can be completed.
             </h5>
+            <h5 style="color: red;" v-if="pages_incomplete.length === 1">
+              Correct errors on page {{ pages_incomplete[0] - 1}} before form can be completed.
+            </h5>
+            <h5 style="color: red;" v-if="pages_incomplete.length === 2">
+              Correct errors on pages {{ pages_incomplete[0] - 1}} and {{ pages_incomplete[1] - 1 }} before form can be completed.
+            </h5>
+            <h5 style="color: red;" v-if="pages_incomplete.length > 2">
+              <span> Correct errors on pages </span> 
+              <span v-for="i in pages_incomplete.length - 1" v-bind:key="i">{{ (pages_incomplete[i-1] - 1) + ", " }}</span>
+              <span>{{ "and " + (pages_incomplete[pages_incomplete.length - 1] - 1) + " " }}</span>
+              <span>before form can be completed. </span>
+            </h5>
+
             <h5 v-if="saved" class="text-success">
               Your changes have been saved!
             </h5>
             <!-- Save Button -->
             <div class="text-right">
               <button class="btn btn-primary" @click="save_data()">
-                Save my progress!
+                Submit Form!
               </button>
             </div>
             {{ user_data }}
@@ -122,6 +135,7 @@ export default {
 
       errors: false,
       saved: false,
+      pages_incomplete: []
     }
   },
   async created() {
@@ -293,12 +307,23 @@ export default {
         this.errors = true;
       }
 
+      this.pages_incomplete = [];
+
       if (!this.errors) {
         this.saved = true;
+
+        // If no errors on final page, save data, and check other pages for complete form submission
+        this.pages_incomplete = [];
+
+        if (!this.user_data.onb_2) 
+          this.pages_incomplete.push(2);
+        if (!this.user_data.onb_3)
+          this.pages_incomplete.push(3);
+        if (!this.user_data.onb_4)
+          this.pages_incomplete.push(4);
       }
     },
     save_data: async function(){
-      
       this.detect_errors();
 
       if (this.saved) {
@@ -323,7 +348,8 @@ export default {
     writeUserData: async function() {
       var data = {
         first_choice: this.first_choice,
-        second_choice: this.second_choice, 
+        second_choice: this.second_choice,
+        onb_5: true
       };
 
       console.log(this.user_data.uid);

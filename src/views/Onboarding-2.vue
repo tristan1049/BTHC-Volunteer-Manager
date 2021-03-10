@@ -481,7 +481,7 @@
             </div>
 
             <h5 style="color: red;" v-if="errors">
-              Correct errors before data can be saved.
+              Correct errors on this page before data can be saved.
             </h5>
             <h5 v-if="saved" class="text-success">
               Your changes have been saved!
@@ -695,7 +695,7 @@ export default {
         ethnicity_other: this.ethnicity_other,
         languages: this.languages,
         language_other: this.language_other,
-        onboarding_stage: 2
+        onb_2: true
       };
 
       //ERROR CHECK

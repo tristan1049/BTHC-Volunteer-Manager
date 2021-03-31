@@ -233,7 +233,7 @@
 
             
             <h5 style="color: red;" v-if="errors">
-              Correct errors before data can be saved.
+              Correct errors on this page before data can be saved.
             </h5>
             <h5 v-if="saved" class="text-success">
               Your changes have been saved!
@@ -372,7 +372,7 @@ export default {
       var data = {
         vol_role: this.role,
         terms: this.terms,
-        onboarding_stage: 4
+        onb_4: true
       };
 
       console.log(this.user_data.uid);

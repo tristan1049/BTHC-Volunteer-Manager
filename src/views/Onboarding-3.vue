@@ -106,7 +106,7 @@
 
 
             <h5 style="color: red;" v-if="errors">
-              Correct errors before data can be saved.
+              Correct errors on this page before data can be saved.
             </h5>
             <h5 v-if="saved" class="text-success">
               Your changes have been saved!
@@ -243,7 +243,7 @@ export default {
         volunteer_text: this.volunteer_text,
         tax_prof: this.tax_prof,
         ce_credit: this.ce_credit,
-        onboarding_stage: 3
+        onb_3: true
       };
 
       // Update database

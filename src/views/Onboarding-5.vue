@@ -124,7 +124,7 @@ export default {
       filtered_json: {},
 
       table_array: [],
-      table_fields: ["Site Name", "Address", "Hours of Operation", "Roles"],
+      table_fields: ["Site Name", "Address", "Hours of Operation", "Other Languages", "Roles"],
 
       first_choice: null,
       second_choice: null,

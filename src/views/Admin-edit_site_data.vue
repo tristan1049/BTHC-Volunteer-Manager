@@ -210,7 +210,7 @@ export default {
       //filtered_json: {},
 
       table_array: [],
-      table_fields: ["Site Name", "Address", "Hours of Operation", "Roles"],
+      table_fields: ["Site Name", "Address", "Hours of Operation", "Other Languages", "Roles"],
 
       show_save_modal: false,
       role: "Tax Preparer"
@@ -305,6 +305,8 @@ export default {
           }
           else if(cleaned === "address")
             new_el["Address"] = this.input_json[i][property];
+          else if(cleaned === "languages")
+            new_el["Other Languages"] = this.input_json[i][property];
           else{
             if(this.input_json[i][property] != null && this.input_json[i][property].length != 0){
               if(new_el["Hours of Operation"] == null)
@@ -333,6 +335,11 @@ export default {
           this.compiled_json[name]["Roles"] += '<span class = "badge text-uppercase '+ color_class + '">' +  this.role + '</span>'; 
         } 
         this.compiled_json[name]["roles_dict"][this.role] = true; 
+
+        if(this.compiled_json[name]["Other Languages"] == null && new_el["Other Languages"] != null){
+          this.compiled_json[name]["Other Languages"] = new_el["Other Languages"];
+        }
+        
       }
 
       this.table_array = Object.values(this.compiled_json);

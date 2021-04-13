@@ -75,7 +75,7 @@
             </h5>
 
             <h5 v-if="saved" class="text-success">
-              Your changes have been saved!
+              Your changes on this page have been saved!
             </h5>
             <!-- Save Button -->
             <div class="text-right">
@@ -106,6 +106,7 @@ import 'firebase/auth';
 import 'firebase/database';
 
 import PageChanger from "../components/PageChanger";
+//import { Router } from 'express';
 //import JsonCSV from 'vue-json-csv'
 
 //var csv = require('csvtojson');
@@ -329,6 +330,10 @@ export default {
       if (this.saved) {
         await this.writeUserData();
       }
+      if (this.saved && this.pages_incomplete.length === 0 && this.user_data != null){
+        await this.writeNeedsApproval();
+        this.$router.push('/onbfinish');
+      }
     },
     getUserData: async function(user_uid) {
       var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
@@ -354,6 +359,49 @@ export default {
 
       console.log(this.user_data.uid);
       await firebase.database().ref('user-data/' + this.user_data.uid).update(data, function(error) {
+            if (error) {
+                // The write failed...
+                console.log("Error: Could not update user data!");
+                console.log(error);
+                return false;
+            }
+            else {
+                // Data saved successfully!
+                return true;
+            }
+        });
+    },
+    writeNeedsApproval: async function() {
+      var data = {
+        first_name: this.user_data.first_name,
+        last_name: this.user_data.last_name,
+        email: this.user_data.email,
+        uid: this.user_data.uid,
+      };
+
+      console.log("Saving data");
+
+      console.log(this.user_data.uid);
+      await firebase.database().ref('needs-approval/' + this.user_data.uid).update(data, function(error) {
+            if (error) {
+                // The write failed...
+                console.log("Error: Could not update user data!");
+                console.log(error);
+                return false;
+            }
+            else {
+                // Data saved successfully!
+                return true;
+            }
+        });
+    },
+    removeNeedsApproval: async function() {
+      var data = null;
+
+      console.log("Saving data");
+
+      console.log(this.user_data.uid);
+      await firebase.database().ref('needs-approval/' + this.user_data.uid).set(data, function(error) {
             if (error) {
                 // The write failed...
                 console.log("Error: Could not update user data!");

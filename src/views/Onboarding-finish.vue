@@ -16,7 +16,7 @@
             <br />
             <br />
             <div class="text-center">
-              <router-link to='/udash1'>
+              <router-link to='/udash/updates'>
                 <button class="btn btn-primary">
                 Continue
                 <span class="fa fa-chevron-right ml-2"></span>

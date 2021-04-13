@@ -13,6 +13,13 @@
     	// ".read": "root.child('site-admins').hasChild(auth.uid)",
     	// ".write": "root.child('site-admins').hasChild(auth.uid)",
     },
+	"needs-approval": {
+      "$uid": {
+        // Allow only authenticated users access to their data
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+      },
+    },
     "site-data": {
       "$site":  {
         "user-data": {

@@ -47,14 +47,34 @@ export default new Router({
       component: ()=>import('./views/Onboarding-5.vue')
     },
     {
+      path: '/onbfinish',
+      name: 'Onboarding-finish',
+      component: ()=>import('./views/Onboarding-finish.vue')
+    },
+    {
       path: '/adminsitedata',
       name: 'adminsitedata',
       component: ()=>import('./views/Admin-edit_site_data.vue')
     },
     {
-      path: '/udash1',
-      name: 'udash1',
-      component: ()=>import('./views/UDash1.vue')
+      path: '/udash/updates',
+      name: 'udashupdates',
+      component: ()=>import('./views/UDashUpdates.vue')
+    },
+    {
+      path: '/udash/hours',
+      name: 'udashupdates',
+      component: ()=>import('./views/UDashHours.vue')
+    },
+    {
+      path: '/udash/training',
+      name: 'udashupdates',
+      component: ()=>import('./views/UDashTraining.vue')
+    },
+    {
+      path: '/udash/profile',
+      name: 'udashupdates',
+      component: ()=>import('./views/UDashProfile.vue')
     },
     {
       path: '/second',

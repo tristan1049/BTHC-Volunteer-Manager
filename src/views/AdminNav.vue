@@ -1,7 +1,7 @@
 <template>
   <basenav type="primary" effect="dark" expand style="position: fixed" class="fill-width navbar-style">
     <div class="container">
-      <a class="navbar-brand" href="#">Boston Tax Help - Volunteer Dashboard</a>
+      <a class="navbar-brand" href="#">Boston Tax Help - Admin Dashboard</a>
       <div class="row" slot="content-header" slot-scope="{ closeMenu }">
         <div class="col-6 collapse-brand">
           <img src="../../assets/img/logo-crop.png" alt="Logo" />
@@ -13,12 +13,12 @@
       <ul class="navbar-nav ml-lg-auto">
         <li class="nav-item">
           <a class="nav-link nav-link-icon" href="https://www.bostontaxhelp.org/">
-            Main Site
+            [Sample Text]
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link nav-link-icon" href="https://www.bostontaxhelp.org/contact-us/">
-            Contact Us
+            [Sample Text]
           </a>
         </li>
       </ul>
@@ -35,7 +35,7 @@
                 ><a href="#/register" class="dropdown-item">Register</a> -->
                 <a class="dropdown-item" href="#">Logout</a>
                 <a class="dropdown-item" href="#">Change Email</a>
-                <a class="dropdown-item" href="#">Request Role/Site Change</a>
+                <a class="dropdown-item" href="#">Promote User</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Delete Account</a>
             </ul>

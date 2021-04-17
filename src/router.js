@@ -57,6 +57,16 @@ export default new Router({
       component: ()=>import('./views/Admin-edit_site_data.vue')
     },
     {
+      path: '/adash/sites',
+      name: 'adashsite',
+      component: ()=>import('./views/ADashSites.vue')
+    },
+    {
+      path: '/adash/approvals',
+      name: 'adashapprovals',
+      component: ()=>import('./views/ADashApprovals.vue')
+    },
+    {
       path: '/udash/updates',
       name: 'udashupdates',
       component: ()=>import('./views/UDashUpdates.vue')

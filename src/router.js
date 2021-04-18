@@ -52,6 +52,11 @@ export default new Router({
       component: ()=>import('./views/Admin-edit_site_data.vue')
     },
     {
+      path: '/adminedit',
+      name: 'adminedit',
+      component: ()=>import('./views/Admin_edit_user_data.vue')
+    },
+    {
       path: '/udash1',
       name: 'udash1',
       component: ()=>import('./views/UDash1.vue')

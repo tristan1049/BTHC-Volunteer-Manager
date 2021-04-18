@@ -17,6 +17,13 @@ export default new Router({
 
     },
     {
+
+      path: '/logout',
+      name: 'home',
+      component: () => import('./views/LoggedOut.vue')
+
+    },
+    {
       path: '/first',
       name: 'firsturl',
       component: ()=>import('./views/LoginPage.vue')
@@ -65,6 +72,11 @@ export default new Router({
       path: '/adash/approvals',
       name: 'adashapprovals',
       component: ()=>import('./views/ADashApprovals.vue')
+    },
+    {
+      path: '/adash/emailchange',
+      name: 'adashemailchange',
+      component: ()=>import('./views/ADashEmailChange.vue')
     },
     {
       path: '/udash/updates',

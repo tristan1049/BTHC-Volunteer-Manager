@@ -33,7 +33,7 @@
                 ><a href="#/profile" class="dropdown-item">Profile</a
                 ><a href="#/login" class="dropdown-item">Login</a
                 ><a href="#/register" class="dropdown-item">Register</a> -->
-                <a class="dropdown-item" href="#">Logout</a>
+                <a class="dropdown-item clickable" @click="logout">Logout</a>
                 <a class="dropdown-item" href="#">Change Email</a>
                 <a class="dropdown-item" href="#">Promote User</a>
                 <div class="dropdown-divider"></div>
@@ -49,6 +49,10 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+import 'firebase/auth';
+import 'firebase/database';
+
 import basenav from "../components/BaseNav";
 import closebutton from "../components/CloseButton";
 //import basedropdown from "../components/BaseDropdown";
@@ -60,6 +64,68 @@ export default {
     //basedropdown,
     closebutton,
   },
+  data() {
+    return {
+      user_data: null,
+
+      approval_json: {},
+      table_json: {},
+      table_array: [],
+      
+      table_fields: [
+          { key: 'First Name', sortable: true },
+          { key: 'Last Name', sortable: true },
+          { key: 'Email', sortable: true }
+      ]
+    }
+  },
+  async created() {
+    // Check if firebase is initialized, and if not, initialize it
+    if (firebase.apps.length === 0) {
+      const firebaseConfig = {
+        apiKey: "AIzaSyDlpces85D7-q4YXqQvk6Sd7K4ns_hxzIc",
+        authDomain: "bthc-volunteer-manager.firebaseapp.com",
+        databaseURL: "https://bthc-volunteer-manager-default-rtdb.firebaseio.com",
+        projectId: "bthc-volunteer-manager",
+        storageBucket: "bthc-volunteer-manager.appspot.com",
+        messagingSenderId: "460312984962",
+        appId: "1:460312984962:web:929cdb4bca23cea6dd239b",
+        measurementId: "G-YKPGZTFHW2",
+      };
+
+      await firebase.default.initializeApp(firebaseConfig);
+    }
+  },
+  mounted() {
+    let self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // Set user_data and check for updates to it
+            self.getUserData(user.uid);
+            //self.initLoop()
+        }
+        else {
+            // No user is signed in.
+            console.log("Error: No user is signed in!");
+        }
+    });
+  },
+  methods: {
+    getUserData: async function(user_uid) {
+      var data = await firebase.database().ref('user-data/' + user_uid).once('value').then((snapshot) => {
+          return snapshot.val();
+      });
+      this.user_data = data;
+    },
+    logout: async function() {
+      try {
+        await firebase.auth().signOut();
+      } catch (e){
+        console.log("Could not sign out");
+      } 
+      this.$router.push('/logout');
+    }
+  }
 };
 </script>
 
@@ -70,5 +136,8 @@ export default {
   padding: 0%;
   max-width: 100%;
   width: 100% !important;
+}
+.clickable{
+    cursor: pointer;
 }
 </style>

@@ -4,18 +4,28 @@
       <div class="row justify-content-center form-body">
         <div class="col-10">
           <div class="card shadow-lg p-5 my-5">
-            <Onb2 v-bind:admin_edit="true" v-bind:edit="edit1"/>
-            <Onb3 v-bind:admin_edit="true" v-bind:edit="edit2"/>
-            <Onb4 v-bind:admin_edit="true" v-bind:edit="edit3"/>
-            <Onb5 v-bind:admin_edit="true" v-bind:edit="edit4"/>
-            <div>{{ user_data }}</div>
+            <Onb2 ref="err1" v-bind:admin_edit="true" v-bind:edit="edit"/>
+            <Onb3 ref="err2" v-bind:admin_edit="true" v-bind:edit="edit"/>
+            <Onb4 ref="err3" v-bind:admin_edit="true" v-bind:edit="edit"/>
+            <Onb5 ref="err4" v-bind:admin_edit="true" v-bind:edit="edit"/>
+
+            <div v-if="errors_exist">
+                <h5 style="color: red;">
+                    Correct errors on this page before data can be saved.
+                </h5>
+            </div>
+            <div v-if="!errors_exist">
+                <h5 v-if="edit !== 0" class="text-success">
+                    Your changes have been saved!
+                </h5>
+            </div>
 
             <!-- Save Button -->
             <div class="text-right">
                 <button class="btn btn-primary" @click="save_data()">
                 Edit Form
                 </button>
-                <div>{{ user_data }}</div>
+
             </div>
           </div>
         </div>
@@ -25,6 +35,7 @@
 </template>
 
 <script>
+import { EventBus } from '../eventbus';
 import Onb2 from "../components/Onb-2";
 import Onb3 from "../components/Onb-3";
 import Onb4 from "../components/Onb-4";
@@ -40,18 +51,29 @@ export default {
   },
   data() {
       return {
-          edit1: false,
-          edit2: false,
-          edit3: false,
-          edit4: false
+          edit: 0,
+          errors_exist: false
       }
   },
+  mounted() {
+    EventBus.$on('errors', this.errorHandler);
+  },
   methods: {
+      errorHandler: function() {
+        this.errors_exist = true;
+      },
       save_data: function() {
-          this.edit1 = true;
-          this.edit2 = true;
-          this.edit3 = true;
-          this.edit4 = true;
+        this.errors_exist = false;
+
+        if (this.edit === 0) {
+            this.edit = 1;
+        }
+        else if (this.edit === 1) {
+            this.edit = 2;
+        }
+        else if (this.edit === 2) {
+            this.edit = 1;
+        }
       }
   }
 };

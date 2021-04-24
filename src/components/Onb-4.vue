@@ -242,13 +242,20 @@
         </div>
         <div>{{ user_data }}</div>
     </div>
+
+    <!-- Page changing UI -->
+    <div v-if="!admin_edit">
+        <PageChanger v-bind:page="3"/>
+    </div>
   </div>
 </template>
 
 <script>
+import { EventBus } from '../eventbus';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/database';
+import PageChanger from "../components/PageChanger";
 
 export default {
   name: "Onb-4",
@@ -258,16 +265,21 @@ export default {
       default: false
     },
     edit: {
-      type: Boolean,
-      default: false
+        type: Number,
+        default: 0
     }
   },
+  components: {
+      PageChanger
+  },
   watch: {
-      edit: function(newVal, oldVal) {
-          if (newVal === true && oldVal === false) {
+      edit: function(val) {
+          if (val !== 0) {
               this.save_data();
-          } 
-          this.edit = false;
+              if (this.errors) {
+                  EventBus.$emit('errors', true);
+              }
+          }
       }
   },
   data() {
@@ -302,6 +314,7 @@ export default {
   },
   mounted() {
     let self = this;
+
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             // Set user_data and check for updates to it

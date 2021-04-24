@@ -53,23 +53,23 @@
 
     <br />
 
-    <h5 style="color: red;" v-if="errors">
-        Correct errors on this page before form can be completed.
-    </h5>
-    <h5 style="color: red;" v-if="pages_incomplete.length === 1">
-        Correct errors on page {{ pages_incomplete[0] - 1}} before form can be completed.
-    </h5>
-    <h5 style="color: red;" v-if="pages_incomplete.length === 2">
-        Correct errors on pages {{ pages_incomplete[0] - 1}} and {{ pages_incomplete[1] - 1 }} before form can be completed.
-    </h5>
-    <h5 style="color: red;" v-if="pages_incomplete.length > 2">
-        <span> Correct errors on pages </span> 
-        <span v-for="i in pages_incomplete.length - 1" v-bind:key="i">{{ (pages_incomplete[i-1] - 1) + ", " }}</span>
-        <span>{{ "and " + (pages_incomplete[pages_incomplete.length - 1] - 1) + " " }}</span>
-        <span>before form can be completed. </span>
-    </h5>
-
     <div v-if="!admin_edit">
+        <h5 style="color: red;" v-if="errors">
+            Correct errors on this page before form can be completed.
+        </h5>
+        <h5 style="color: red;" v-if="pages_incomplete.length === 1">
+            Correct errors on page {{ pages_incomplete[0] - 1}} before form can be completed.
+        </h5>
+        <h5 style="color: red;" v-if="pages_incomplete.length === 2">
+            Correct errors on pages {{ pages_incomplete[0] - 1}} and {{ pages_incomplete[1] - 1 }} before form can be completed.
+        </h5>
+        <h5 style="color: red;" v-if="pages_incomplete.length > 2">
+            <span> Correct errors on pages </span> 
+            <span v-for="i in pages_incomplete.length - 1" v-bind:key="i">{{ (pages_incomplete[i-1] - 1) + ", " }}</span>
+            <span>{{ "and " + (pages_incomplete[pages_incomplete.length - 1] - 1) + " " }}</span>
+            <span>before form can be completed. </span>
+        </h5>
+
         <h5 v-if="saved" class="text-success">
             Your changes have been saved!
         </h5>
@@ -79,7 +79,12 @@
             Submit Form!
             </button>
         </div>
-        <div v-if="!admin_edit">{{ user_data }}</div>
+        <div>{{ user_data }}</div>
+    </div>
+
+    <!-- Page changing UI -->
+    <div v-if="!admin_edit">
+        <PageChanger v-bind:page="4"/>
     </div>
   </div>
 </template>
@@ -87,9 +92,11 @@
 <script>
 //import { json } from 'express';
 //import "bootstrap/dist/js/bootstrap.bundle";
+import { EventBus } from '../eventbus';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/database';
+import PageChanger from "../components/PageChanger";
 
 //import JsonCSV from 'vue-json-csv'
 
@@ -97,25 +104,27 @@ import 'firebase/database';
 
 export default {
   name: "Onb-5",
-  components: {
-    //JsonCSV
-  },
   props: {
     admin_edit: {
       type: Boolean,
       default: false
     },
     edit: {
-      type: Boolean,
-      default: false
+        type: Number,
+        default: 0
     }
   },
+  components: {
+      PageChanger
+  },
   watch: {
-      edit: function(newVal, oldVal) {
-          if (newVal === true && oldVal === false) {
+      edit: function(val) {
+          if (val !== 0) {
               this.save_data();
-          } 
-          this.edit = false;
+              if (this.errors) {
+                  EventBus.$emit('errors', true);
+              }
+          }
       }
   },
   data() {
@@ -159,6 +168,7 @@ export default {
   },
   mounted() {
     let self = this;
+
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             // Set user_data

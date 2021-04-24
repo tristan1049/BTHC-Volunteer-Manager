@@ -10,10 +10,6 @@
             <br />
             <br />
 
-            <!-- Page changing UI -->
-            <div v-if="!admin_edit">
-              <PageChanger v-bind:page="1"/>
-            </div>
           </div>
         </div>
       </div>
@@ -22,13 +18,11 @@
 </template>
 
 <script>
-import PageChanger from "../components/PageChanger";
 import Onb2 from "../components/Onb-2.vue";
 
 export default {
   name: "Onboarding-2",
   components: {
-    PageChanger,
     Onb2
   },
 };
